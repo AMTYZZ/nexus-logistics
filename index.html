@@ -19,6 +19,191 @@
   .cursor-ring { position:fixed; width:36px; height:36px; border:1px solid var(--accent); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:all 0.15s ease; opacity:0.5; }
   body::before { content:''; position:fixed; inset:0; background-image:linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px); background-size:50px 50px; pointer-events:none; z-index:0; }
 
+  /* ========== ANIMATED BACKGROUND VEHICLES ========== */
+
+  /* --- AIRPLANE --- */
+  .bg-airplane {
+    position: fixed;
+    z-index: 0;
+    pointer-events: none;
+    animation: flyPlane 18s linear infinite;
+    top: 18%;
+    left: -260px;
+    opacity: 0.18;
+    filter: drop-shadow(0 0 12px rgba(0,212,255,0.6));
+  }
+  .bg-airplane svg { width: 220px; height: auto; }
+
+  .bg-airplane2 {
+    position: fixed;
+    z-index: 0;
+    pointer-events: none;
+    animation: flyPlane2 28s linear infinite;
+    top: 55%;
+    left: -200px;
+    opacity: 0.1;
+    filter: drop-shadow(0 0 10px rgba(255,107,53,0.5));
+  }
+  .bg-airplane2 svg { width: 140px; height: auto; }
+
+  /* --- CARGO SHIP --- */
+  .bg-ship {
+    position: fixed;
+    bottom: 0px;
+    left: -400px;
+    z-index: 0;
+    pointer-events: none;
+    animation: sailShip 35s linear infinite;
+    opacity: 0.13;
+    filter: drop-shadow(0 0 14px rgba(0,212,255,0.4));
+  }
+  .bg-ship svg { width: 360px; height: auto; }
+
+  /* --- CARGO TRUCK --- */
+  .bg-truck {
+    position: fixed;
+    bottom: 0px;
+    right: -340px;
+    z-index: 0;
+    pointer-events: none;
+    animation: driveTruck 22s linear infinite;
+    opacity: 0.14;
+    filter: drop-shadow(0 0 10px rgba(57,255,20,0.4));
+  }
+  .bg-truck svg { width: 280px; height: auto; }
+
+  /* --- CONTRAIL LINES from airplane --- */
+  .contrail {
+    position: fixed;
+    top: 19%;
+    left: -10px;
+    width: 100vw;
+    height: 2px;
+    z-index: 0;
+    pointer-events: none;
+    animation: contrailAnim 18s linear infinite;
+    opacity: 0;
+  }
+  .contrail::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 180px; height: 1px;
+    background: linear-gradient(90deg, rgba(0,212,255,0.5), transparent);
+  }
+
+  /* --- CLOUD PARTICLES --- */
+  .bg-cloud {
+    position: fixed;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.04;
+    animation: driftCloud linear infinite;
+  }
+  .bg-cloud:nth-child(1) { top:12%; animation-duration:60s; animation-delay:0s; left:-300px; }
+  .bg-cloud:nth-child(2) { top:30%; animation-duration:80s; animation-delay:-20s; left:-400px; }
+  .bg-cloud:nth-child(3) { top:60%; animation-duration:70s; animation-delay:-35s; left:-350px; }
+
+  /* --- WATER WAVE (behind ship) --- */
+  .bg-water {
+    position: fixed;
+    bottom: 0;
+    left: 0; right: 0;
+    height: 60px;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent, rgba(0,80,180,0.06));
+    overflow: hidden;
+  }
+  .bg-water::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: -100%;
+    width: 300%;
+    height: 30px;
+    background: repeating-linear-gradient(90deg,
+      rgba(0,212,255,0.04) 0px,
+      rgba(0,212,255,0.01) 20px,
+      rgba(0,212,255,0.04) 40px
+    );
+    animation: waveMove 8s linear infinite;
+  }
+
+  /* --- SPEED LINES (for truck) --- */
+  .speed-lines {
+    position: fixed;
+    bottom: 40px;
+    right: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    animation: speedLinesAnim 22s linear infinite;
+  }
+  .speed-lines span {
+    display: block;
+    width: 60px; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(57,255,20,0.3));
+    margin-bottom: 6px;
+  }
+
+  /* --- PACKAGE BOXES floating --- */
+  .bg-box {
+    position: fixed;
+    z-index: 0;
+    pointer-events: none;
+    font-size: 1.4rem;
+    opacity: 0.07;
+    animation: floatBox linear infinite;
+  }
+  .bg-box:nth-child(1) { animation-duration:14s; animation-delay:0s; left:10%; top:-40px; }
+  .bg-box:nth-child(2) { animation-duration:18s; animation-delay:-6s; left:35%; top:-40px; }
+  .bg-box:nth-child(3) { animation-duration:12s; animation-delay:-10s; left:60%; top:-40px; }
+  .bg-box:nth-child(4) { animation-duration:16s; animation-delay:-3s; left:80%; top:-40px; }
+  .bg-box:nth-child(5) { animation-duration:20s; animation-delay:-8s; left:50%; top:-40px; }
+
+  /* KEYFRAMES */
+  @keyframes flyPlane {
+    0%   { transform: translateX(0) translateY(0); left: -260px; }
+    100% { transform: translateX(calc(100vw + 300px)) translateY(-30px); left: 0; }
+  }
+  @keyframes flyPlane2 {
+    0%   { left: -200px; transform: translateY(0); }
+    100% { left: calc(100vw + 220px); transform: translateY(20px); }
+  }
+  @keyframes sailShip {
+    0%   { left: -400px; }
+    100% { left: calc(100vw + 420px); }
+  }
+  @keyframes driveTruck {
+    0%   { right: -340px; transform: scaleX(-1); }
+    100% { right: calc(100vw + 360px); transform: scaleX(-1); }
+  }
+  @keyframes contrailAnim {
+    0%   { opacity: 0; transform: translateX(-100%); }
+    10%  { opacity: 0.15; }
+    80%  { opacity: 0.1; }
+    100% { opacity: 0; transform: translateX(100vw); }
+  }
+  @keyframes driftCloud {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(calc(100vw + 500px)); }
+  }
+  @keyframes waveMove {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(33.33%); }
+  }
+  @keyframes floatBox {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.07; }
+    90%  { opacity: 0.05; }
+    100% { transform: translateY(100vh) rotate(180deg); opacity: 0; }
+  }
+  @keyframes speedLinesAnim {
+    0%,85%  { opacity: 0; }
+    88%,96% { opacity: 1; }
+    100%    { opacity: 0; }
+  }
+
   /* TOP BAR */
   .topbar { background:rgba(0,212,255,0.06); border-bottom:1px solid var(--border); padding:8px 60px; display:flex; justify-content:space-between; align-items:center; position:fixed; top:0; left:0; right:0; z-index:101; }
   .topbar-left { display:flex; gap:28px; }
@@ -251,6 +436,159 @@
 <div class="cursor-ring" id="cursorRing"></div>
 <div class="notif" id="notif"></div>
 
+<!-- ===== ANIMATED BACKGROUND SCENE ===== -->
+
+<!-- Water layer -->
+<div class="bg-water"></div>
+
+<!-- Floating cargo boxes -->
+<div class="bg-box">📦</div>
+<div class="bg-box">📦</div>
+<div class="bg-box">🗃️</div>
+<div class="bg-box">📦</div>
+<div class="bg-box">🗃️</div>
+
+<!-- AIRPLANE 1 (large, cyan) -->
+<div class="bg-airplane">
+  <svg viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
+    <!-- Fuselage -->
+    <ellipse cx="150" cy="52" rx="130" ry="18" fill="#00d4ff" opacity="0.9"/>
+    <!-- Nose cone -->
+    <path d="M280 52 Q310 52 300 52 L280 44 Q295 52 280 52Z" fill="#00d4ff"/>
+    <!-- Tail fin vertical -->
+    <path d="M30 52 L20 20 L45 40 Z" fill="#00d4ff" opacity="0.8"/>
+    <!-- Tail fin horizontal -->
+    <path d="M25 52 L10 65 L55 55 Z" fill="#00d4ff" opacity="0.7"/>
+    <!-- Main wings -->
+    <path d="M120 52 L80 10 L200 48 L120 52Z" fill="#00aadd" opacity="0.85"/>
+    <path d="M120 52 L80 94 L200 56 L120 52Z" fill="#00aadd" opacity="0.75"/>
+    <!-- Engine pod left -->
+    <ellipse cx="130" cy="20" rx="18" ry="7" fill="#0088bb"/>
+    <!-- Engine pod right -->
+    <ellipse cx="130" cy="84" rx="18" ry="7" fill="#0088bb"/>
+    <!-- Cockpit windows -->
+    <ellipse cx="258" cy="47" rx="10" ry="6" fill="#80eeff" opacity="0.7"/>
+    <ellipse cx="238" cy="46" rx="7" ry="5" fill="#80eeff" opacity="0.5"/>
+    <!-- CARGO text on fuselage -->
+    <text x="100" y="56" font-size="11" fill="#003344" font-family="monospace" font-weight="bold" opacity="0.8">NEXUS CARGO</text>
+    <!-- Contrail dots -->
+    <circle cx="15" cy="52" r="3" fill="#00d4ff" opacity="0.4"/>
+    <circle cx="5" cy="52" r="2" fill="#00d4ff" opacity="0.2"/>
+  </svg>
+</div>
+
+<!-- AIRPLANE 2 (smaller, orange tint) -->
+<div class="bg-airplane2">
+  <svg viewBox="0 0 220 80" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="110" cy="40" rx="95" ry="13" fill="#ff6b35" opacity="0.8"/>
+    <path d="M200 40 Q220 40 215 40 L200 34 Q212 40 200 40Z" fill="#ff6b35"/>
+    <path d="M25 40 L15 18 L35 32 Z" fill="#ff6b35" opacity="0.7"/>
+    <path d="M20 40 L8 50 L40 43 Z" fill="#ff6b35" opacity="0.6"/>
+    <path d="M90 40 L60 10 L150 36 L90 40Z" fill="#dd5522" opacity="0.8"/>
+    <path d="M90 40 L60 70 L150 44 L90 40Z" fill="#dd5522" opacity="0.7"/>
+    <ellipse cx="95" cy="16" rx="13" ry="5" fill="#bb4411"/>
+    <ellipse cx="95" cy="64" rx="13" ry="5" fill="#bb4411"/>
+    <ellipse cx="185" cy="36" rx="7" ry="5" fill="#ffaa88" opacity="0.6"/>
+    <text x="75" y="43" font-size="8" fill="#330000" font-family="monospace" font-weight="bold" opacity="0.7">NXG AIR</text>
+  </svg>
+</div>
+
+<!-- CARGO SHIP -->
+<div class="bg-ship">
+  <svg viewBox="0 0 420 160" xmlns="http://www.w3.org/2000/svg">
+    <!-- Hull -->
+    <path d="M20 110 Q210 130 400 110 L390 140 Q210 155 30 140 Z" fill="#00d4ff" opacity="0.7"/>
+    <!-- Hull bottom -->
+    <path d="M30 140 Q210 158 390 140 L380 148 Q210 163 40 148 Z" fill="#0088aa" opacity="0.6"/>
+    <!-- Deck -->
+    <rect x="40" y="90" width="340" height="20" rx="3" fill="#00aacc" opacity="0.8"/>
+    <!-- Bridge/superstructure -->
+    <rect x="280" y="55" width="80" height="38" rx="3" fill="#00bbdd" opacity="0.85"/>
+    <rect x="290" y="45" width="60" height="15" rx="2" fill="#00ccee" opacity="0.8"/>
+    <!-- Funnel/chimney -->
+    <rect x="325" y="30" width="16" height="20" rx="2" fill="#00aacc"/>
+    <!-- Smoke puffs -->
+    <circle cx="333" cy="25" r="6" fill="#aaddff" opacity="0.3"/>
+    <circle cx="340" cy="18" r="4" fill="#aaddff" opacity="0.2"/>
+    <!-- Cargo containers on deck -->
+    <rect x="50"  y="72" width="44" height="20" rx="2" fill="#ff6b35" opacity="0.8"/>
+    <rect x="100" y="72" width="44" height="20" rx="2" fill="#00d4ff" opacity="0.8"/>
+    <rect x="150" y="72" width="44" height="20" rx="2" fill="#39ff14" opacity="0.6"/>
+    <rect x="200" y="72" width="44" height="20" rx="2" fill="#ff6b35" opacity="0.7"/>
+    <rect x="55"  y="54" width="40" height="20" rx="2" fill="#00aacc" opacity="0.7"/>
+    <rect x="103" y="54" width="40" height="20" rx="2" fill="#ffaa00" opacity="0.6"/>
+    <rect x="155" y="54" width="40" height="20" rx="2" fill="#ff6b35" opacity="0.7"/>
+    <!-- Container lines -->
+    <line x1="72"  y1="72" x2="72"  y2="92" stroke="#003344" stroke-width="1" opacity="0.5"/>
+    <line x1="122" y1="72" x2="122" y2="92" stroke="#003344" stroke-width="1" opacity="0.5"/>
+    <line x1="172" y1="72" x2="172" y2="92" stroke="#003344" stroke-width="1" opacity="0.5"/>
+    <!-- Mast -->
+    <line x1="210" y1="90" x2="210" y2="30" stroke="#00ccff" stroke-width="2" opacity="0.6"/>
+    <line x1="160" y1="40" x2="260" y2="40" stroke="#00ccff" stroke-width="1" opacity="0.4"/>
+    <!-- Bridge windows -->
+    <rect x="288" y="60" width="10" height="8" rx="1" fill="#80eeff" opacity="0.7"/>
+    <rect x="304" y="60" width="10" height="8" rx="1" fill="#80eeff" opacity="0.7"/>
+    <rect x="320" y="60" width="10" height="8" rx="1" fill="#80eeff" opacity="0.5"/>
+    <!-- Wake / water disturbance -->
+    <path d="M18 125 Q10 130 0 128" stroke="#aaddff" stroke-width="2" fill="none" opacity="0.3"/>
+    <path d="M18 132 Q8 138 -5 136" stroke="#aaddff" stroke-width="1.5" fill="none" opacity="0.2"/>
+    <!-- NEXUS label -->
+    <text x="80" y="86" font-size="9" fill="#003344" font-family="monospace" font-weight="bold" opacity="0.8">NEXUS GLOBAL</text>
+  </svg>
+</div>
+
+<!-- CARGO TRUCK -->
+<div class="bg-truck">
+  <svg viewBox="0 0 320 120" xmlns="http://www.w3.org/2000/svg">
+    <!-- Trailer body -->
+    <rect x="10" y="25" width="200" height="70" rx="4" fill="#39ff14" opacity="0.7"/>
+    <!-- Trailer roof ridge -->
+    <rect x="10" y="22" width="200" height="6" rx="3" fill="#55ff33" opacity="0.8"/>
+    <!-- Trailer door lines -->
+    <line x1="110" y1="25" x2="110" y2="95" stroke="#003300" stroke-width="1.5" opacity="0.5"/>
+    <line x1="160" y1="25" x2="160" y2="95" stroke="#003300" stroke-width="1.5" opacity="0.5"/>
+    <line x1="60"  y1="25" x2="60"  y2="95" stroke="#003300" stroke-width="1" opacity="0.4"/>
+    <!-- Door handles -->
+    <rect x="105" y="57" width="10" height="4" rx="2" fill="#003300" opacity="0.6"/>
+    <rect x="155" y="57" width="10" height="4" rx="2" fill="#003300" opacity="0.6"/>
+    <!-- NEXUS CARGO label -->
+    <rect x="20" y="50" width="78" height="22" rx="2" fill="rgba(0,0,0,0.3)"/>
+    <text x="25" y="63" font-size="8" fill="#39ff14" font-family="monospace" font-weight="bold">NEXUS</text>
+    <text x="25" y="73" font-size="7" fill="#aaffaa" font-family="monospace">CARGO</text>
+    <!-- Cab -->
+    <rect x="207" y="38" width="80" height="57" rx="6" fill="#22cc00" opacity="0.85"/>
+    <!-- Cab roof -->
+    <path d="M207 38 Q215 20 250 18 L287 20 Q295 25 287 38 Z" fill="#33dd11" opacity="0.8"/>
+    <!-- Windshield -->
+    <path d="M215 22 Q230 14 260 15 L282 22 Q285 30 282 38 L215 38 Z" fill="#80ffcc" opacity="0.35"/>
+    <!-- Cab door window -->
+    <rect x="215" y="45" width="35" height="25" rx="3" fill="#80ffcc" opacity="0.3"/>
+    <!-- Cab door handle -->
+    <rect x="245" y="60" width="10" height="3" rx="1" fill="#003300" opacity="0.5"/>
+    <!-- Exhaust pipe -->
+    <rect x="282" y="18" width="6" height="22" rx="2" fill="#228800"/>
+    <!-- Exhaust smoke -->
+    <circle cx="285" cy="13" r="5" fill="#aaffaa" opacity="0.25"/>
+    <circle cx="288" cy="6"  r="3" fill="#aaffaa" opacity="0.15"/>
+    <!-- Wheels -->
+    <circle cx="55"  cy="97" r="18" fill="#111" stroke="#39ff14" stroke-width="2" opacity="0.8"/>
+    <circle cx="55"  cy="97" r="9"  fill="#222" stroke="#39ff14" stroke-width="1" opacity="0.6"/>
+    <circle cx="140" cy="97" r="18" fill="#111" stroke="#39ff14" stroke-width="2" opacity="0.8"/>
+    <circle cx="140" cy="97" r="9"  fill="#222" stroke="#39ff14" stroke-width="1" opacity="0.6"/>
+    <circle cx="255" cy="97" r="18" fill="#111" stroke="#39ff14" stroke-width="2" opacity="0.8"/>
+    <circle cx="255" cy="97" r="9"  fill="#222" stroke="#39ff14" stroke-width="1" opacity="0.6"/>
+    <circle cx="290" cy="97" r="14" fill="#111" stroke="#22cc00" stroke-width="2" opacity="0.8"/>
+    <circle cx="290" cy="97" r="7"  fill="#222" stroke="#22cc00" stroke-width="1" opacity="0.6"/>
+    <!-- Headlights -->
+    <ellipse cx="302" cy="65" rx="7" ry="5" fill="#ffffaa" opacity="0.6"/>
+    <ellipse cx="302" cy="78" rx="7" ry="5" fill="#ffaa44" opacity="0.5"/>
+    <!-- Road ground shadow -->
+    <ellipse cx="160" cy="114" rx="150" ry="5" fill="#39ff14" opacity="0.04"/>
+  </svg>
+</div>
+
+<!-- ===== END ANIMATED BACKGROUND ===== -->
+
 <!-- TOP BAR -->
 <div class="topbar">
   <div class="topbar-left">
@@ -362,7 +700,7 @@
           <tr><td><span class="rbadge rb-air">SPECIAL CARGO</span></td><td>Hazmat / Perishable / Oversized — Worldwide</td><td class="rate-price">Custom Quote</td><td class="rate-time">As Required</td><td>Varies</td></tr>
         </tbody>
       </table>
-      <div class="rate-note-bar">⚠️ All rates shown in ₹ INR (1 USD = ₹83 approx). Final rate depends on fuel surcharges, current market conditions, customs duties, and special handling. Contact: <strong>+91 9930824005</strong> | amit.sharma07735@gmail.com</div>
+      <div class="rate-note-bar">⚠️ All rates shown in ₹ INR (1 USD = ₹83 approx). Final rate depends on fuel surcharges, current market conditions, customs duties, and special handling. Contact: <strong>+91 9930824005</strong> | <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2445494d500a574c455649451413131711644349454d480a474b49">[email&#160;protected]</a></div>
     </div>
 
     <!-- COUNTRIES -->
@@ -615,7 +953,7 @@
   <button class="chat-btn" onclick="toggleChat()">🤖</button>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // Cursor
   const cur = document.getElementById('cursor'), ring = document.getElementById('cursorRing');
   document.addEventListener('mousemove', e => {
@@ -690,5 +1028,4 @@
     country: "We deliver to 195+ countries worldwide — every single continent and nation! Asia, Europe, Americas, Africa, Middle East, Pacific. If you have a destination in mind, we cover it.",
     contact: "📞 +91 9930824005 (24/7 available)\n✉️ amit.sharma07735@gmail.com\nWe respond within 2 hours!",
     service: "We offer: Air Freight, Ocean Freight, Road Freight, Express Courier, Warehousing, Customs Brokerage, and Last-Mile Delivery — all AI-powered and available worldwide.",
-    time: "Transit times: Express 1–3 days, Air Freight 3–7 days, Ocean 18–35 days, Road 5–14 days. Exact time depends on origin and destination.",
-    default: "For the best answer, please call us at 📞 +91 9930824005 or email amit.sharma07735@gmail.com — our team is a
+    time: "Transit times: Express 1–3 days,
