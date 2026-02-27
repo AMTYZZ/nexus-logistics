@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXUS GLOBAL LOGISTIC SOLUTION — International Logistics</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050810; --bg2: #080d1a; --surface: #0d1428; --surface2: #111c35;
+    --accent: #00d4ff; --accent2: #ff6b35; --accent3: #39ff14;
+    --text: #e8edf5; --muted: #5a6a8a; --border: rgba(0,212,255,0.15);
+    --glow: 0 0 20px rgba(0,212,255,0.3);
+  }
+
+  /* WHITE CURSOR */
+  * { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='8' fill='white' stroke='black' stroke-width='2'/%3E%3C/svg%3E") 12 12, auto !important; }
+  a, button, select, input, textarea { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Ccircle cx='14' cy='14' r='10' fill='%23ff6b35' stroke='black' stroke-width='2'/%3E%3C/svg%3E") 14 14, pointer !important; }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg); color:var(--text); font-family:'Rajdhani',sans-serif; overflow-x:hidden; }
+  
+  body::before { content:''; position:fixed; inset:0; background-image:linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px); background-size:50px 50px; pointer-events:none; z-index:0; }
+
+  /* ========== ANIMATED BACKGROUND VEHICLES ========== */
+
+  /* --- AIRPLANE --- */
+  .bg-airplane {
+    position: fixed;
+    z-index: 0;
+    pointer-events: none;
+    animation: flyPlane 18s linear infinite;
+    top: 18%;
+    left: -260px;
+    opacity: 0.18;
+    filter: drop-shadow(0 0 12px rgba(0,212,255,0.6));
+  }
+  .bg-airplane svg { width: 220px; height: auto; }
+
+  .bg-airplane2 {
+    position: fixed;
+    z-index: 0;
+    pointer-events: none;
+    animation: flyPlane2 28s linear infinite;
+    top: 55%;
+    left: -200px;
+    opacity: 0.1;
+    filter: drop-shadow(0 0 10px rgba(255,107,53,0.5));
+  }
+  .bg-airplane2 svg { width: 140px; height: auto; }
+
+  /* --- CARGO SHIP --- */
+  .bg-ship {
+    position: fixed;
+    bottom: 0px;
+    left: -400px;
+    z-index: 0;
+    pointer-events: none;
+    animation: sailShip 35s linear infinite;
+    opacity: 0.13;
+    filter: drop-shadow(0 0 14px rgba(0,212,255,0.4));
+  }
+  .bg-ship svg { width: 360px; height: auto; }
+
+  /* --- CARGO TRUCK --- */
+  .bg-truck {
+    position: fixed;
+    bottom: 0px;
+    right: -340px;
+    z-index: 0;
+    pointer-events: none;
+    animation: driveTruck 22s linear infinite;
+    opacity: 0.14;
+    filter: drop-shadow(0 0 10px rgba(57,255,20,0.4));
+  }
+  .bg-truck svg { width: 280px; height: auto; }
+
+  /* --- CONTRAIL LINES from airplane --- */
+  .contrail {
+    position: fixed;
+    top: 19%;
+    left: -10px;
+    width: 100vw;
+    height: 2px;
+    z-index: 0;
+    pointer-events: none;
+    animation: contrailAnim 18s linear infinite;
+    opacity: 0;
+  }
+  .contrail::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 180px; height: 1px;
+    background: linear-gradient(90deg, rgba(0,212,255,0.5), transparent);
+  }
+
+  /* --- CLOUD PARTICLES --- */
+  .bg-cloud {
+    position: fixed;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.04;
+    animation: driftCloud linear infinite;
+  }
+  .bg-cloud:nth-child(1) { top:12%; animation-duration:60s; animation-delay:0s; left:-300px; }
+  .bg-cloud:nth-child(2) { top:30%; animation-duration:80s; animation-delay:-20s; left:-400px; }
+  .bg-cloud:nth-child(3) { top:60%; animation-duration:70s; animation-delay:-35s; left:-350px; }
+
+  /* --- WATER WAVE (behind ship) --- */
+  .bg-water {
+    position: fixed;
+    bottom: 0;
+    left: 0; right: 0;
+    height: 60px;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent, rgba(0,80,180,0.06));
+    overflow: hidden;
+  }
+  .bg-water::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: -100%;
+    width: 300%;
+    height: 30px;
+    background: repeating-linear-gradient(90deg,
+      rgba(0,212,255,0.04) 0px,
+      rgba(0,212,255,0.01) 20px,
+      rgba(0,212,255,0.04) 40px
+    );
+    animation: waveMove 8s linear infinite;
+  }
+
+  /* --- SPEED LINES (for truck) --- */
+  .speed-lines {
+    position: fixed;
+    bottom: 40px;
+    right: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    animation: speedLinesAnim 22s linear infinite;
+  }
+  .speed-lines span {
+    display: block;
+    width: 60px; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(57,255,20,0.3));
+    margin-bottom: 6px;
+  }
+
+  /* --- PACKAGE BOXES floating --- */
+  .bg-box {
+    position: fixed;
+    z-index: 0;
+    pointer-events: none;
+    font-size: 1.4rem;
+    opacity: 0.07;
+    animation: floatBox linear infinite;
+  }
+  .bg-box:nth-child(1) { animation-duration:14s; animation-delay:0s; left:10%; top:-40px; }
+  .bg-box:nth-child(2) { animation-duration:18s; animation-delay:-6s; left:35%; top:-40px; }
+  .bg-box:nth-child(3) { animation-duration:12s; animation-delay:-10s; left:60%; top:-40px; }
+  .bg-box:nth-child(4) { animation-duration:16s; animation-delay:-3s; left:80%; top:-40px; }
+  .bg-box:nth-child(5) { animation-duration:20s; animation-delay:-8s; left:50%; top:-40px; }
+
+  /* KEYFRAMES */
+  @keyframes flyPlane {
+    0%   { transform: translateX(0) translateY(0); left: -260px; }
+    100% { transform: translateX(calc(100vw + 300px)) translateY(-30px); left: 0; }
+  }
+  @keyframes flyPlane2 {
+    0%   { left: -200px; transform: translateY(0); }
+    100% { left: calc(100vw + 220px); transform: translateY(20px); }
+  }
+  @keyframes sailShip {
+    0%   { left: -400px; }
+    100% { left: calc(100vw + 420px); }
+  }
+  @keyframes driveTruck {
+    0%   { right: -340px; transform: scaleX(-1); }
+    100% { right: calc(100vw + 360px); transform: scaleX(-1); }
+  }
+  @keyframes contrailAnim {
+    0%   { opacity: 0; transform: translateX(-100%); }
+    10%  { opacity: 0.15; }
+    80%  { opacity: 0.1; }
+    100% { opacity: 0; transform: translateX(100vw); }
+  }
+  @keyframes driftCloud {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(calc(100vw + 500px)); }
+  }
+  @keyframes waveMove {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(33.33%); }
+  }
+  @keyframes floatBox {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.07; }
+    90%  { opacity: 0.05; }
+    100% { transform: translateY(100vh) rotate(180deg); opacity: 0; }
+  }
+  @keyframes speedLinesAnim {
+    0%,85%  { opacity: 0; }
+    88%,96% { opacity: 1; }
+    100%    { opacity: 0; }
+  }
+
+  /* TOP BAR */
+  .topbar { background:rgba(0,212,255,0.06); border-bottom:1px solid var(--border); padding:8px 60px; display:flex; justify-content:space-between; align-items:center; position:fixed; top:0; left:0; right:0; z-index:101; }
+  .topbar-left { display:flex; gap:28px; }
+  .topbar-item { font-family:'Space Mono',monospace; font-size:0.62rem; letter-spacing:2px; color:var(--muted); display:flex; align-items:center; gap:8px; text-decoration:none; transition:color 0.3s; }
+  .topbar-item:hover { color:var(--accent); }
+  .topbar-right { font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:2px; color:var(--accent3); display:flex; align-items:center; gap:8px; }
+  .live-dot { width:6px; height:6px; background:var(--accent3); border-radius:50%; animation:pulse 1.5s infinite; box-shadow:0 0 6px var(--accent3); }
+
+  /* NAV */
+  nav { position:fixed; top:34px; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:16px 60px; background:rgba(5,8,16,0.96); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
+  .logo { font-family:'Orbitron',monospace; font-size:1.05rem; font-weight:900; letter-spacing:3px; color:var(--accent); text-shadow:var(--glow); line-height:1.3; }
+  .logo .sub { font-size:0.45rem; letter-spacing:5px; color:var(--muted); display:block; margin-top:2px; }
+  .logo span { color:var(--accent2); }
+  .nav-links { display:flex; gap:32px; list-style:none; }
+  .nav-links a { font-family:'Space Mono',monospace; font-size:0.62rem; letter-spacing:3px; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.3s; position:relative;  }
+  .nav-links a::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:1px; background:var(--accent); transition:width 0.3s; }
+  .nav-links a:hover { color:var(--accent); }
+  .nav-links a:hover::after { width:100%; }
+  .nav-cta { font-family:'Space Mono',monospace; font-size:0.62rem; letter-spacing:3px; text-transform:uppercase; padding:10px 22px; border:1px solid var(--accent); color:var(--accent); text-decoration:none; position:relative; overflow:hidden; transition:color 0.3s;  }
+  .nav-cta::before { content:''; position:absolute; inset:0; background:var(--accent); transform:translateX(-100%); transition:transform 0.3s; }
+  .nav-cta:hover { color:var(--bg); }
+  .nav-cta:hover::before { transform:translateX(0); }
+  .nav-cta span { position:relative; z-index:1; }
+
+  /* PAGES */
+  .page { display:none; min-height:100vh; padding-top:112px; position:relative; z-index:1; }
+  .page.active { display:block; }
+  #home { display:none; min-height:100vh; padding-top:112px; position:relative; z-index:1; overflow:hidden; }
+  #home.active { display:flex; flex-direction:column; justify-content:center; }
+
+  /* HERO */
+  .hero-bg { position:absolute; inset:0; background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(0,212,255,0.08) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 80% 20%,rgba(255,107,53,0.06) 0%,transparent 50%); }
+  .hero-content { max-width:1200px; margin:0 auto; padding:0 60px; position:relative; }
+  .hero-tag { font-family:'Space Mono',monospace; font-size:0.68rem; letter-spacing:4px; color:var(--accent); text-transform:uppercase; margin-bottom:22px; display:flex; align-items:center; gap:12px; animation:fadeUp 0.8s ease both; }
+  .hero-tag::before { content:''; width:40px; height:1px; background:var(--accent); }
+  h1 { font-family:'Orbitron',monospace; font-size:clamp(2rem,5vw,4.5rem); font-weight:900; line-height:1.0; margin-bottom:28px; animation:fadeUp 0.8s 0.1s ease both; }
+  h1 .line2 { color:var(--accent); display:block; }
+  h1 .line3 { color:var(--muted); font-size:0.45em; font-weight:400; display:block; letter-spacing:6px; font-family:'Space Mono',monospace; margin-top:10px; }
+  .hero-desc { font-size:1.1rem; color:var(--muted); max-width:500px; line-height:1.7; margin-bottom:44px; animation:fadeUp 0.8s 0.2s ease both; }
+  .hero-actions { display:flex; gap:16px; animation:fadeUp 0.8s 0.3s ease both; }
+  .btn-primary { font-family:'Space Mono',monospace; font-size:0.7rem; letter-spacing:3px; text-transform:uppercase; padding:14px 30px; background:var(--accent); color:var(--bg); border:none;  font-weight:700; transition:box-shadow 0.3s; }
+  .btn-primary:hover { box-shadow:0 0 30px rgba(0,212,255,0.5); }
+  .btn-outline { font-family:'Space Mono',monospace; font-size:0.7rem; letter-spacing:3px; text-transform:uppercase; padding:14px 30px; background:transparent; color:var(--text); border:1px solid var(--border);  transition:border-color 0.3s,color 0.3s; }
+  .btn-outline:hover { border-color:var(--accent); color:var(--accent); }
+  .stats-bar { display:flex; margin-top:60px; border-top:1px solid var(--border); animation:fadeUp 0.8s 0.5s ease both; }
+  .stat-item { flex:1; padding:24px 32px; border-right:1px solid var(--border); }
+  .stat-item:last-child { border-right:none; }
+  .stat-num { font-family:'Orbitron',monospace; font-size:1.9rem; font-weight:700; color:var(--accent); }
+  .stat-label { font-family:'Space Mono',monospace; font-size:0.58rem; letter-spacing:3px; text-transform:uppercase; color:var(--muted); margin-top:5px; }
+  .hero-visual { position:absolute; right:60px; top:50%; transform:translateY(-40%); width:320px; height:320px; animation:fadeUp 0.8s 0.4s ease both; }
+  .globe { width:100%; height:100%; border-radius:50%; border:1px solid rgba(0,212,255,0.2); position:relative; animation:spin 30s linear infinite; background:radial-gradient(circle at 30% 30%,rgba(0,212,255,0.1),transparent 60%); }
+  .globe::before { content:''; position:absolute; inset:-1px; border-radius:50%; border:1px solid rgba(0,212,255,0.1); transform:rotateX(70deg); }
+  .globe::after { content:''; position:absolute; inset:-1px; border-radius:50%; border:1px solid rgba(0,212,255,0.1); transform:rotateY(70deg); }
+  .globe-ring { position:absolute; inset:-30px; border-radius:50%; border:1px solid rgba(0,212,255,0.1); }
+  .globe-ring2 { position:absolute; inset:-60px; border-radius:50%; border:1px dashed rgba(0,212,255,0.05); animation:spin 20s linear infinite reverse; }
+  .globe-dot { position:absolute; width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 10px var(--accent); animation:pulse 2s ease infinite; }
+  .globe-dot:nth-child(1) { top:20%; left:30%; }
+  .globe-dot:nth-child(2) { top:60%; left:70%; animation-delay:0.5s; background:var(--accent2); box-shadow:0 0 10px var(--accent2); }
+  .globe-dot:nth-child(3) { top:40%; left:80%; animation-delay:1s; }
+  .globe-dot:nth-child(4) { top:75%; left:25%; animation-delay:1.5s; background:var(--accent3); box-shadow:0 0 10px var(--accent3); }
+
+  /* SECTION */
+  .section { max-width:1200px; margin:0 auto; padding:80px 60px; }
+  .section-tag { font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:4px; color:var(--accent); text-transform:uppercase; margin-bottom:14px; display:flex; align-items:center; gap:12px; }
+  .section-tag::before { content:'//'; color:var(--accent2); }
+  .section-title { font-family:'Orbitron',monospace; font-size:clamp(1.5rem,3vw,2.5rem); font-weight:700; margin-bottom:14px; }
+  .section-sub { color:var(--muted); font-size:1rem; max-width:560px; line-height:1.7; margin-bottom:44px; }
+
+  /* SERVICES GRID */
+  .services-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; background:var(--border); }
+  .service-card { background:var(--surface); padding:34px; position:relative; overflow:hidden; transition:background 0.3s; }
+  .service-card::before { content:''; position:absolute; top:0; left:0; width:3px; height:0; background:var(--accent); transition:height 0.4s; }
+  .service-card:hover { background:var(--surface2); }
+  .service-card:hover::before { height:100%; }
+  .service-icon { font-size:2rem; margin-bottom:14px; display:block; }
+  .service-num { position:absolute; top:16px; right:20px; font-family:'Orbitron',monospace; font-size:0.58rem; color:var(--muted); letter-spacing:2px; }
+  .service-card h3 { font-family:'Orbitron',monospace; font-size:0.78rem; font-weight:700; letter-spacing:2px; margin-bottom:10px; }
+  .service-card p { font-size:0.9rem; color:var(--muted); line-height:1.7; }
+
+  /* RATES */
+  .rates-hero { background:var(--surface); border:1px solid var(--border); padding:44px; margin-bottom:50px; position:relative; display:flex; align-items:center; gap:50px; }
+  .rates-hero::before { content:'LIVE RATE BOARD'; position:absolute; top:-10px; left:30px; background:var(--surface); padding:0 12px; font-family:'Space Mono',monospace; font-size:0.58rem; letter-spacing:3px; color:var(--accent2); }
+  .rate-big { font-family:'Orbitron',monospace; font-size:4rem; font-weight:900; color:var(--accent); text-shadow:var(--glow); line-height:1; }
+  .rate-big span { font-size:1.5rem; color:var(--muted); }
+  .rate-info { flex:1; }
+  .rate-info h3 { font-family:'Orbitron',monospace; font-size:1.1rem; letter-spacing:3px; margin-bottom:10px; }
+  .rate-info p { color:var(--muted); font-size:1rem; line-height:1.7; }
+  .rate-info .rate-tags { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+  .rate-tag-item { padding:6px 14px; background:rgba(0,212,255,0.08); border:1px solid rgba(0,212,255,0.2); font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:2px; color:var(--accent); }
+
+  .rates-table-wrap { background:var(--surface); border:1px solid var(--border); overflow:hidden; margin-bottom:40px; }
+  .rates-table { width:100%; border-collapse:collapse; }
+  .rates-table th { font-family:'Space Mono',monospace; font-size:0.58rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); padding:16px 20px; text-align:left; border-bottom:1px solid var(--border); background:var(--surface2); }
+  .rates-table td { padding:15px 20px; font-size:0.92rem; border-bottom:1px solid rgba(0,212,255,0.04); }
+  .rates-table tr:last-child td { border-bottom:none; }
+  .rates-table tr:hover td { background:rgba(0,212,255,0.03); }
+  .rate-price { font-family:'Space Mono',monospace; font-size:0.8rem; color:var(--accent); font-weight:700; }
+  .rate-time { font-family:'Space Mono',monospace; font-size:0.68rem; color:var(--accent3); }
+  .rbadge { display:inline-block; padding:4px 10px; font-family:'Space Mono',monospace; font-size:0.55rem; letter-spacing:2px; text-transform:uppercase; }
+  .rb-air { background:rgba(0,212,255,0.1); color:var(--accent); border:1px solid rgba(0,212,255,0.25); }
+  .rb-ocean { background:rgba(255,107,53,0.1); color:var(--accent2); border:1px solid rgba(255,107,53,0.25); }
+  .rb-road { background:rgba(57,255,20,0.1); color:var(--accent3); border:1px solid rgba(57,255,20,0.25); }
+  .rb-express { background:rgba(255,200,0,0.1); color:#ffc800; border:1px solid rgba(255,200,0,0.25); }
+  .rate-note-bar { padding:16px 20px; background:var(--bg2); border-top:1px solid var(--border); font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:2px; color:var(--muted); border-left:3px solid var(--accent2); }
+
+  /* COUNTRIES */
+  .region-block { margin-bottom:36px; }
+  .region-title { font-family:'Orbitron',monospace; font-size:0.82rem; letter-spacing:3px; color:var(--accent2); margin-bottom:14px; display:flex; align-items:center; gap:14px; }
+  .region-title::after { content:''; flex:1; height:1px; background:var(--border); }
+  .countries-grid { display:flex; flex-wrap:wrap; gap:8px; }
+  .country-tag { padding:6px 14px; background:var(--surface); border:1px solid var(--border); font-family:'Space Mono',monospace; font-size:0.58rem; letter-spacing:2px; color:var(--muted); transition:all 0.3s; }
+  .country-tag:hover { border-color:var(--accent); color:var(--accent); background:rgba(0,212,255,0.05); }
+
+  /* TRACKING */
+  .tracking-box { background:var(--surface); border:1px solid var(--border); padding:46px; position:relative; }
+  .tracking-box::before { content:'AI TRACKING SYSTEM'; position:absolute; top:-10px; left:30px; background:var(--surface); padding:0 12px; font-family:'Space Mono',monospace; font-size:0.58rem; letter-spacing:3px; color:var(--accent); }
+  .track-input-row { display:flex; margin-bottom:36px; }
+  .track-input { flex:1; background:var(--bg2); border:1px solid var(--border); border-right:none; padding:15px 22px; font-family:'Space Mono',monospace; font-size:0.8rem; color:var(--text); letter-spacing:2px; outline:none; transition:border-color 0.3s; }
+  .track-input:focus { border-color:var(--accent); }
+  .track-input::placeholder { color:var(--muted); }
+  .track-btn { background:var(--accent); color:var(--bg); border:none; padding:15px 28px; font-family:'Space Mono',monospace; font-size:0.7rem; letter-spacing:3px;  font-weight:700; }
+  .track-btn:hover { box-shadow:0 0 20px rgba(0,212,255,0.4); }
+  .track-result { display:none; }
+  .track-timeline { display:flex; flex-direction:column; }
+  .track-step { display:flex; gap:22px; position:relative; padding-bottom:28px; }
+  .track-step::before { content:''; position:absolute; left:11px; top:28px; width:1px; height:calc(100% - 28px); background:var(--border); }
+  .track-step:last-child::before { display:none; }
+  .tdot { width:24px; height:24px; border-radius:50%; background:var(--surface2); border:2px solid var(--border); flex-shrink:0; margin-top:2px; }
+  .tdot.done { background:var(--accent); border-color:var(--accent); box-shadow:0 0 12px rgba(0,212,255,0.4); }
+  .tdot.active { background:var(--accent2); border-color:var(--accent2); animation:pulse 1.5s infinite; }
+  .tinfo h4 { font-family:'Orbitron',monospace; font-size:0.7rem; letter-spacing:2px; margin-bottom:4px; }
+  .tinfo p { font-size:0.88rem; color:var(--muted); }
+  .ttime { font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--accent); letter-spacing:2px; margin-top:4px; }
+  .ai-bar { display:flex; align-items:center; gap:12px; margin-bottom:28px; padding:10px 18px; background:rgba(57,255,20,0.05); border:1px solid rgba(57,255,20,0.2); width:fit-content; }
+  .ai-dot { width:8px; height:8px; background:var(--accent3); border-radius:50%; animation:pulse 1.5s infinite; }
+  .ai-txt { font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:3px; color:var(--accent3); text-transform:uppercase; }
+
+  /* QUOTE */
+  .quote-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; background:var(--border); }
+  .quote-left { background:var(--surface); padding:46px; }
+  .quote-right { background:var(--surface); padding:46px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+  .form-group { margin-bottom:20px; }
+  .form-label { display:block; font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:3px; text-transform:uppercase; color:var(--muted); margin-bottom:9px; }
+  .form-input,.form-select { width:100%; background:var(--bg2); border:1px solid var(--border); padding:12px 16px; font-family:'Rajdhani',sans-serif; font-size:1rem; color:var(--text); outline:none; transition:border-color 0.3s; appearance:none; }
+  .form-input:focus,.form-select:focus { border-color:var(--accent); }
+  .form-select option { background:var(--surface); }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .quote-amount { font-family:'Orbitron',monospace; font-size:3rem; font-weight:900; color:var(--accent); text-shadow:var(--glow); margin-bottom:6px; }
+  .quote-lbl { font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:3px; color:var(--muted); margin-bottom:34px; text-transform:uppercase; }
+  .brow { display:flex; justify-content:space-between; padding:11px 0; border-bottom:1px solid var(--border); font-size:0.92rem; }
+  .brow .bval { color:var(--accent); font-family:'Space Mono',monospace; font-size:0.75rem; }
+  .brow:last-child { border-bottom:none; font-weight:700; }
+
+  /* CONTACT */
+  .contact-wrap { display:grid; grid-template-columns:1fr 1.5fr; gap:2px; background:var(--border); }
+  .contact-left { background:var(--surface); padding:56px 46px; }
+  .contact-right { background:var(--surface); padding:56px 46px; }
+  .citem { display:flex; gap:18px; margin-bottom:32px; }
+  .cicon { font-size:1.4rem; flex-shrink:0; padding-top:4px; }
+  .cdet h4 { font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:7px; }
+  .cdet p { color:var(--muted); font-size:0.95rem; line-height:1.6; }
+  .cdet a { color:var(--accent2); text-decoration:none; transition:color 0.3s; }
+  .cdet a:hover { color:var(--accent); }
+  .ebar { background:rgba(255,107,53,0.07); border:1px solid rgba(255,107,53,0.25); padding:18px 26px; display:flex; align-items:center; gap:26px; margin-bottom:36px; flex-wrap:wrap; }
+  .elabel { font-family:'Orbitron',monospace; font-size:0.68rem; letter-spacing:3px; color:var(--accent2); }
+  .eitem { font-family:'Space Mono',monospace; font-size:0.72rem; }
+  .eitem a { color:var(--accent); text-decoration:none; }
+  .form-textarea { width:100%; background:var(--bg2); border:1px solid var(--border); padding:13px 16px; font-family:'Rajdhani',sans-serif; font-size:1rem; color:var(--text); outline:none; resize:vertical; min-height:110px; transition:border-color 0.3s; }
+  .form-textarea:focus { border-color:var(--accent); }
+  .submit-btn { width:100%; background:var(--accent); color:var(--bg); border:none; padding:17px; font-family:'Space Mono',monospace; font-size:0.75rem; letter-spacing:3px; text-transform:uppercase;  font-weight:700; margin-top:6px; transition:box-shadow 0.3s; }
+  .submit-btn:hover { box-shadow:0 0 28px rgba(0,212,255,0.4); }
+
+  /* AI CHAT */
+  .chat-widget { position:fixed; bottom:28px; right:28px; z-index:200; }
+  .chat-btn { width:58px; height:58px; background:var(--accent); border:none; border-radius:50%;  font-size:1.4rem; display:flex; align-items:center; justify-content:center; box-shadow:0 0 28px rgba(0,212,255,0.4); transition:transform 0.3s; }
+  .chat-btn:hover { transform:scale(1.1); }
+  .chat-panel { position:absolute; bottom:76px; right:0; width:350px; background:var(--surface); border:1px solid var(--border); display:none; flex-direction:column; box-shadow:0 20px 60px rgba(0,0,0,0.5); }
+  .chat-panel.open { display:flex; }
+  .chat-head { background:var(--surface2); padding:15px 18px; display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border); }
+  .chat-head h4 { font-family:'Orbitron',monospace; font-size:0.7rem; letter-spacing:2px; }
+  .chat-msgs { padding:18px; height:250px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; }
+  .chat-msgs::-webkit-scrollbar { width:3px; }
+  .chat-msgs::-webkit-scrollbar-thumb { background:var(--accent); }
+  .cmsg { padding:10px 14px; font-size:0.86rem; line-height:1.5; max-width:88%; }
+  .cmsg.bot { background:var(--surface2); border-left:2px solid var(--accent); align-self:flex-start; }
+  .cmsg.user { background:rgba(0,212,255,0.1); border-right:2px solid var(--accent); align-self:flex-end; text-align:right; }
+  .chat-input-row { display:flex; border-top:1px solid var(--border); }
+  .chat-input { flex:1; background:var(--bg2); border:none; padding:13px 15px; font-family:'Rajdhani',sans-serif; font-size:0.92rem; color:var(--text); outline:none; }
+  .chat-send { background:var(--accent); border:none; padding:13px 18px; color:var(--bg);  font-weight:700; font-size:1rem; }
+
+  /* FOOTER */
+  footer { border-top:1px solid var(--border); position:relative; z-index:1; }
+  .foot-grid { max-width:1200px; margin:0 auto; padding:56px 60px 36px; display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:46px; }
+  .foot-brand p { color:var(--muted); font-size:0.9rem; line-height:1.7; margin-top:14px; }
+  .foot-contacts { margin-top:18px; display:flex; flex-direction:column; gap:9px; }
+  .foot-contacts a { font-family:'Space Mono',monospace; font-size:0.68rem; color:var(--accent2); text-decoration:none; display:flex; align-items:center; gap:8px; }
+  .foot-contacts a:hover { color:var(--accent); }
+  .foot-col h4 { font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:18px; }
+  .foot-col ul { list-style:none; }
+  .foot-col ul li { margin-bottom:9px; }
+  .foot-col ul li a { color:var(--muted); text-decoration:none; font-size:0.9rem; transition:color 0.3s;  }
+  .foot-col ul li a:hover { color:var(--text); }
+  .foot-bottom { max-width:1200px; margin:0 auto; padding:18px 60px; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border); }
+  .foot-bottom p { font-family:'Space Mono',monospace; font-size:0.56rem; letter-spacing:2px; color:var(--muted); text-transform:uppercase; }
+
+  /* NOTIFICATION */
+  .notif { position:fixed; top:118px; right:28px; background:var(--surface); border:1px solid var(--accent); padding:14px 22px; font-family:'Space Mono',monospace; font-size:0.65rem; letter-spacing:2px; color:var(--accent); z-index:300; transform:translateX(200%); transition:transform 0.4s; max-width:300px; }
+  .notif.show { transform:translateX(0); }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.6; transform:scale(0.9); } }
+
+  @media(max-width:900px) {
+    .topbar { padding:7px 16px; } .topbar-left { gap:12px; }
+    nav { padding:14px 18px; top:28px; } .nav-links { display:none; }
+    .hero-content { padding:0 18px; } .hero-visual { display:none; }
+    .section { padding:46px 18px; }
+    .services-grid,.quote-grid,.contact-wrap { grid-template-columns:1fr; }
+    .foot-grid { grid-template-columns:1fr 1fr; padding:36px 18px; gap:28px; }
+    .stats-bar { flex-direction:column; }
+    .form-row { grid-template-columns:1fr; }
+    .rates-hero { flex-direction:column; gap:20px; }
+  }
+</style>
+</head>
+<body>
+
+
+
+<div class="notif" id="notif"></div>
+
+<!-- ===== ANIMATED BACKGROUND SCENE ===== -->
+
+<!-- Water layer -->
+<div class="bg-water"></div>
+
+<!-- Floating cargo boxes -->
+<div class="bg-box">📦</div>
+<div class="bg-box">📦</div>
+<div class="bg-box">🗃️</div>
+<div class="bg-box">📦</div>
+<div class="bg-box">🗃️</div>
+
+<!-- AIRPLANE 1 (large, cyan) -->
+<div class="bg-airplane">
+  <svg viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
+    <!-- Fuselage -->
+    <ellipse cx="150" cy="52" rx="130" ry="18" fill="#00d4ff" opacity="0.9"/>
+    <!-- Nose cone -->
+    <path d="M280 52 Q310 52 300 52 L280 44 Q295 52 280 52Z" fill="#00d4ff"/>
+    <!-- Tail fin vertical -->
+    <path d="M30 52 L20 20 L45 40 Z" fill="#00d4ff" opacity="0.8"/>
+    <!-- Tail fin horizontal -->
+    <path d="M25 52 L10 65 L55 55 Z" fill="#00d4ff" opacity="0.7"/>
+    <!-- Main wings -->
+    <path d="M120 52 L80 10 L200 48 L120 52Z" fill="#00aadd" opacity="0.85"/>
+    <path d="M120 52 L80 94 L200 56 L120 52Z" fill="#00aadd" opacity="0.75"/>
+    <!-- Engine pod left -->
+    <ellipse cx="130" cy="20" rx="18" ry="7" fill="#0088bb"/>
+    <!-- Engine pod right -->
+    <ellipse cx="130" cy="84" rx="18" ry="7" fill="#0088bb"/>
+    <!-- Cockpit windows -->
+    <ellipse cx="258" cy="47" rx="10" ry="6" fill="#80eeff" opacity="0.7"/>
+    <ellipse cx="238" cy="46" rx="7" ry="5" fill="#80eeff" opacity="0.5"/>
+    <!-- CARGO text on fuselage -->
+    <text x="100" y="56" font-size="11" fill="#003344" font-family="monospace" font-weight="bold" opacity="0.8">NEXUS CARGO</text>
+    <!-- Contrail dots -->
+    <circle cx="15" cy="52" r="3" fill="#00d4ff" opacity="0.4"/>
+    <circle cx="5" cy="52" r="2" fill="#00d4ff" opacity="0.2"/>
+  </svg>
+</div>
+
+<!-- AIRPLANE 2 (smaller, orange tint) -->
+<div class="bg-airplane2">
+  <svg viewBox="0 0 220 80" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="110" cy="40" rx="95" ry="13" fill="#ff6b35" opacity="0.8"/>
+    <path d="M200 40 Q220 40 215 40 L200 34 Q212 40 200 40Z" fill="#ff6b35"/>
+    <path d="M25 40 L15 18 L35 32 Z" fill="#ff6b35" opacity="0.7"/>
+    <path d="M20 40 L8 50 L40 43 Z" fill="#ff6b35" opacity="0.6"/>
+    <path d="M90 40 L60 10 L150 36 L90 40Z" fill="#dd5522" opacity="0.8"/>
+    <path d="M90 40 L60 70 L150 44 L90 40Z" fill="#dd5522" opacity="0.7"/>
+    <ellipse cx="95" cy="16" rx="13" ry="5" fill="#bb4411"/>
+    <ellipse cx="95" cy="64" rx="13" ry="5" fill="#bb4411"/>
+    <ellipse cx="185" cy="36" rx="7" ry="5" fill="#ffaa88" opacity="0.6"/>
+    <text x="75" y="43" font-size="8" fill="#330000" font-family="monospace" font-weight="bold" opacity="0.7">NXG AIR</text>
+  </svg>
+</div>
+
+<!-- CARGO SHIP -->
+<div class="bg-ship">
+  <svg viewBox="0 0 420 160" xmlns="http://www.w3.org/2000/svg">
+    <!-- Hull -->
+    <path d="M20 110 Q210 130 400 110 L390 140 Q210 155 30 140 Z" fill="#00d4ff" opacity="0.7"/>
+    <!-- Hull bottom -->
+    <path d="M30 140 Q210 158 390 140 L380 148 Q210 163 40 148 Z" fill="#0088aa" opacity="0.6"/>
+    <!-- Deck -->
+    <rect x="40" y="90" width="340" height="20" rx="3" fill="#00aacc" opacity="0.8"/>
+    <!-- Bridge/superstructure -->
+    <rect x="280" y="55" width="80" height="38" rx="3" fill="#00bbdd" opacity="0.85"/>
+    <rect x="290" y="45" width="60" height="15" rx="2" fill="#00ccee" opacity="0.8"/>
+    <!-- Funnel/chimney -->
+    <rect x="325" y="30" width="16" height="20" rx="2" fill="#00aacc"/>
+    <!-- Smoke puffs -->
+    <circle cx="333" cy="25" r="6" fill="#aaddff" opacity="0.3"/>
+    <circle cx="340" cy="18" r="4" fill="#aaddff" opacity="0.2"/>
+    <!-- Cargo containers on deck -->
+    <rect x="50"  y="72" width="44" height="20" rx="2" fill="#ff6b35" opacity="0.8"/>
+    <rect x="100" y="72" width="44" height="20" rx="2" fill="#00d4ff" opacity="0.8"/>
+    <rect x="150" y="72" width="44" height="20" rx="2" fill="#39ff14" opacity="0.6"/>
+    <rect x="200" y="72" width="44" height="20" rx="2" fill="#ff6b35" opacity="0.7"/>
+    <rect x="55"  y="54" width="40" height="20" rx="2" fill="#00aacc" opacity="0.7"/>
+    <rect x="103" y="54" width="40" height="20" rx="2" fill="#ffaa00" opacity="0.6"/>
+    <rect x="155" y="54" width="40" height="20" rx="2" fill="#ff6b35" opacity="0.7"/>
+    <!-- Container lines -->
+    <line x1="72"  y1="72" x2="72"  y2="92" stroke="#003344" stroke-width="1" opacity="0.5"/>
+    <line x1="122" y1="72" x2="122" y2="92" stroke="#003344" stroke-width="1" opacity="0.5"/>
+    <line x1="172" y1="72" x2="172" y2="92" stroke="#003344" stroke-width="1" opacity="0.5"/>
+    <!-- Mast -->
+    <line x1="210" y1="90" x2="210" y2="30" stroke="#00ccff" stroke-width="2" opacity="0.6"/>
+    <line x1="160" y1="40" x2="260" y2="40" stroke="#00ccff" stroke-width="1" opacity="0.4"/>
+    <!-- Bridge windows -->
+    <rect x="288" y="60" width="10" height="8" rx="1" fill="#80eeff" opacity="0.7"/>
+    <rect x="304" y="60" width="10" height="8" rx="1" fill="#80eeff" opacity="0.7"/>
+    <rect x="320" y="60" width="10" height="8" rx="1" fill="#80eeff" opacity="0.5"/>
+    <!-- Wake / water disturbance -->
+    <path d="M18 125 Q10 130 0 128" stroke="#aaddff" stroke-width="2" fill="none" opacity="0.3"/>
+    <path d="M18 132 Q8 138 -5 136" stroke="#aaddff" stroke-width="1.5" fill="none" opacity="0.2"/>
+    <!-- NEXUS label -->
+    <text x="80" y="86" font-size="9" fill="#003344" font-family="monospace" font-weight="bold" opacity="0.8">NEXUS GLOBAL</text>
+  </svg>
+</div>
+
+<!-- CARGO TRUCK -->
+<div class="bg-truck">
+  <svg viewBox="0 0 320 120" xmlns="http://www.w3.org/2000/svg">
+    <!-- Trailer body -->
+    <rect x="10" y="25" width="200" height="70" rx="4" fill="#39ff14" opacity="0.7"/>
+    <!-- Trailer roof ridge -->
+    <rect x="10" y="22" width="200" height="6" rx="3" fill="#55ff33" opacity="0.8"/>
+    <!-- Trailer door lines -->
+    <line x1="110" y1="25" x2="110" y2="95" stroke="#003300" stroke-width="1.5" opacity="0.5"/>
+    <line x1="160" y1="25" x2="160" y2="95" stroke="#003300" stroke-width="1.5" opacity="0.5"/>
+    <line x1="60"  y1="25" x2="60"  y2="95" stroke="#003300" stroke-width="1" opacity="0.4"/>
+    <!-- Door handles -->
+    <rect x="105" y="57" width="10" height="4" rx="2" fill="#003300" opacity="0.6"/>
+    <rect x="155" y="57" width="10" height="4" rx="2" fill="#003300" opacity="0.6"/>
+    <!-- NEXUS CARGO label -->
+    <rect x="20" y="50" width="78" height="22" rx="2" fill="rgba(0,0,0,0.3)"/>
+    <text x="25" y="63" font-size="8" fill="#39ff14" font-family="monospace" font-weight="bold">NEXUS</text>
+    <text x="25" y="73" font-size="7" fill="#aaffaa" font-family="monospace">CARGO</text>
+    <!-- Cab -->
+    <rect x="207" y="38" width="80" height="57" rx="6" fill="#22cc00" opacity="0.85"/>
+    <!-- Cab roof -->
+    <path d="M207 38 Q215 20 250 18 L287 20 Q295 25 287 38 Z" fill="#33dd11" opacity="0.8"/>
+    <!-- Windshield -->
+    <path d="M215 22 Q230 14 260 15 L282 22 Q285 30 282 38 L215 38 Z" fill="#80ffcc" opacity="0.35"/>
+    <!-- Cab door window -->
+    <rect x="215" y="45" width="35" height="25" rx="3" fill="#80ffcc" opacity="0.3"/>
+    <!-- Cab door handle -->
+    <rect x="245" y="60" width="10" height="3" rx="1" fill="#003300" opacity="0.5"/>
+    <!-- Exhaust pipe -->
+    <rect x="282" y="18" width="6" height="22" rx="2" fill="#228800"/>
+    <!-- Exhaust smoke -->
+    <circle cx="285" cy="13" r="5" fill="#aaffaa" opacity="0.25"/>
+    <circle cx="288" cy="6"  r="3" fill="#aaffaa" opacity="0.15"/>
+    <!-- Wheels -->
+    <circle cx="55"  cy="97" r="18" fill="#111" stroke="#39ff14" stroke-width="2" opacity="0.8"/>
+    <circle cx="55"  cy="97" r="9"  fill="#222" stroke="#39ff14" stroke-width="1" opacity="0.6"/>
+    <circle cx="140" cy="97" r="18" fill="#111" stroke="#39ff14" stroke-width="2" opacity="0.8"/>
+    <circle cx="140" cy="97" r="9"  fill="#222" stroke="#39ff14" stroke-width="1" opacity="0.6"/>
+    <circle cx="255" cy="97" r="18" fill="#111" stroke="#39ff14" stroke-width="2" opacity="0.8"/>
+    <circle cx="255" cy="97" r="9"  fill="#222" stroke="#39ff14" stroke-width="1" opacity="0.6"/>
+    <circle cx="290" cy="97" r="14" fill="#111" stroke="#22cc00" stroke-width="2" opacity="0.8"/>
+    <circle cx="290" cy="97" r="7"  fill="#222" stroke="#22cc00" stroke-width="1" opacity="0.6"/>
+    <!-- Headlights -->
+    <ellipse cx="302" cy="65" rx="7" ry="5" fill="#ffffaa" opacity="0.6"/>
+    <ellipse cx="302" cy="78" rx="7" ry="5" fill="#ffaa44" opacity="0.5"/>
+    <!-- Road ground shadow -->
+    <ellipse cx="160" cy="114" rx="150" ry="5" fill="#39ff14" opacity="0.04"/>
+  </svg>
+</div>
+
+<!-- ===== END ANIMATED BACKGROUND ===== -->
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="tel:+919930824005" class="topbar-item">📞 +91 9930824005</a>
+    <a href="/cdn-cgi/l/email-protection#4c2d212538623f242d3e212d7c7b7b7f790c2b212d2520622f2321" class="topbar-item">✉️ <span class="__cf_email__" data-cfemail="3c5d515548124f545d4e515d0c0b0b0f097c5b515d5550125f5351">[email&#160;protected]</span></a>
+  </div>
+  <div class="topbar-right"><div class="live-dot"></div>24/7 OPERATIONS CENTER ACTIVE</div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">NEXUS<span>.</span>GLOBAL<span class="sub">LOGISTIC SOLUTION</span></div>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showPage('home')">Home</a></li>
+    <li><a href="#" onclick="showPage('services')">Services</a></li>
+    <li><a href="#" onclick="showPage('rates')">Rates & Countries</a></li>
+    <li><a href="#" onclick="showPage('tracking')">Tracking</a></li>
+    <li><a href="#" onclick="showPage('quote')">Get Quote</a></li>
+    <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+  </ul>
+  <a href="#" class="nav-cta" onclick="showPage('quote')"><span>Free Quote</span></a>
+</nav>
+
+<!-- HOME -->
+<section id="home" class="page active">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-tag">AI-Powered International Logistics</div>
+    <h1>MOVE CARGO<br><span class="line2">ACROSS BORDERS</span><span class="line3">NEXUS GLOBAL LOGISTIC SOLUTION</span></h1>
+    <p class="hero-desc">Real-time AI-driven shipment tracking and intelligent global logistics to every country in the world. Rates starting from just ₹2,490/kg ($30) — customized as per your needs.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="showPage('tracking')">Track Shipment</button>
+      <button class="btn-outline" onclick="showPage('quote')">Get Instant Quote</button>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-item"><div class="stat-num">195+</div><div class="stat-label">Countries Served</div></div>
+      <div class="stat-item"><div class="stat-num">₹2,490</div><div class="stat-label">Starting Per KG ($30)</div></div>
+      <div class="stat-item"><div class="stat-num">99.7%</div><div class="stat-label">On-Time Delivery</div></div>
+      <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-label">Customer Support</div></div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="globe-ring2"></div><div class="globe-ring"></div>
+    <div class="globe"><div class="globe-dot"></div><div class="globe-dot"></div><div class="globe-dot"></div><div class="globe-dot"></div></div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="page">
+  <div class="section">
+    <div class="section-tag">What We Offer</div>
+    <h2 class="section-title">GLOBAL LOGISTICS SOLUTIONS</h2>
+    <p class="section-sub">From air freight to last-mile delivery, our AI systems optimize every step of your supply chain to 195+ countries worldwide.</p>
+    <div class="services-grid">
+      <div class="service-card"><span class="service-num">01</span><span class="service-icon">✈️</span><h3>AIR FREIGHT</h3><p>Express air cargo to 195+ countries. AI-optimized routing, real-time flight tracking, and automated customs clearance. Starting from ₹2,490/kg ($30).</p></div>
+      <div class="service-card"><span class="service-num">02</span><span class="service-icon">🚢</span><h3>OCEAN FREIGHT</h3><p>FCL and LCL ocean freight globally. AI predicts port congestion and optimizes sailing schedules. Best for heavy cargo over 500kg.</p></div>
+      <div class="service-card"><span class="service-num">03</span><span class="service-icon">🚛</span><h3>ROAD FREIGHT</h3><p>Cross-border trucking with intelligent AI route planning. Analyzes traffic, weather, and border conditions across all continents.</p></div>
+      <div class="service-card"><span class="service-num">04</span><span class="service-icon">🏭</span><h3>WAREHOUSING</h3><p>Smart warehouses with AI inventory management. IoT sensors provide real-time stock visibility worldwide.</p></div>
+      <div class="service-card"><span class="service-num">05</span><span class="service-icon">📦</span><h3>LAST-MILE DELIVERY</h3><p>Dynamic routing for urban and rural last-mile delivery worldwide. AI reduces failed deliveries by 87% and cuts costs significantly.</p></div>
+      <div class="service-card"><span class="service-num">06</span><span class="service-icon">🛃</span><h3>CUSTOMS BROKERAGE</h3><p>AI-powered customs documentation across all 195 countries. Automated HS code classification, duty calculation, and filing.</p></div>
+    </div>
+    <div style="margin-top:30px;padding:20px 26px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+      <span style="font-family:'Space Mono',monospace;font-size:0.62rem;letter-spacing:3px;color:var(--muted);">QUESTIONS ABOUT OUR SERVICES?</span>
+      <a href="tel:+919930824005" style="font-family:'Space Mono',monospace;font-size:0.72rem;color:var(--accent2);text-decoration:none;">📞 +91 9930824005</a>
+      <a href="/cdn-cgi/l/email-protection#9efff3f7eab0edf6ffecf3ffaea9a9adabdef9f3fff7f2b0fdf1f3" style="font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--accent);text-decoration:none;">✉️ <span class="__cf_email__" data-cfemail="a3c2cecad78dd0cbc2d1cec29394949096e3c4cec2cacf8dc0ccce">[email&#160;protected]</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- RATES & COUNTRIES -->
+<section id="rates" class="page">
+  <div class="section">
+    <div class="section-tag">Transparent Pricing</div>
+    <h2 class="section-title">RATES & COUNTRIES</h2>
+    <p class="section-sub">Competitive rates starting from ₹2,490/kg ($30). Final price is calculated as per your specific logistics requirements — route, weight, volume, and cargo type.</p>
+
+    <div class="rates-hero">
+      <div>
+        <div class="rate-big">₹2,490<span>/kg</span></div>
+        <div style="font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--muted);letter-spacing:2px;margin-top:6px;">= $30 / kg</div>
+      </div>
+      <div class="rate-info">
+        <h3>STARTING RATE — ₹2,490/kg ($30) AS PER YOUR LOGISTICS</h3>
+        <p>Our AI pricing engine calculates your exact rate based on origin, destination, service type, weight, volume, and special handling requirements. Every shipment is unique.</p>
+        <div class="rate-tags">
+          <span class="rate-tag-item">AIR FROM ₹2,490/KG ($30)</span>
+          <span class="rate-tag-item">OCEAN FROM ₹6,640/CBM ($80)</span>
+          <span class="rate-tag-item">EXPRESS AVAILABLE</span>
+          <span class="rate-tag-item">CUSTOM QUOTES</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rates-table-wrap">
+      <table class="rates-table">
+        <thead>
+          <tr><th>Service Type</th><th>Route</th><th>Starting Rate</th><th>Transit Time</th><th>Min. Weight</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="rbadge rb-express">EXPRESS</span></td><td>Worldwide — All 195 Countries</td><td class="rate-price">₹2,490/kg <span style="color:var(--muted);font-size:0.65rem;">($30)</span></td><td class="rate-time">1–3 Days</td><td>1 kg</td></tr>
+          <tr><td><span class="rbadge rb-air">AIR FREIGHT</span></td><td>Asia ↔ Europe</td><td class="rate-price">₹2,490/kg <span style="color:var(--muted);font-size:0.65rem;">($30)</span></td><td class="rate-time">3–5 Days</td><td>10 kg</td></tr>
+          <tr><td><span class="rbadge rb-air">AIR FREIGHT</span></td><td>Asia ↔ Americas (USA, Canada, Brazil)</td><td class="rate-price">₹2,656/kg <span style="color:var(--muted);font-size:0.65rem;">($32)</span></td><td class="rate-time">4–6 Days</td><td>10 kg</td></tr>
+          <tr><td><span class="rbadge rb-air">AIR FREIGHT</span></td><td>Asia ↔ Africa (All African Countries)</td><td class="rate-price">₹2,822/kg <span style="color:var(--muted);font-size:0.65rem;">($34)</span></td><td class="rate-time">4–7 Days</td><td>10 kg</td></tr>
+          <tr><td><span class="rbadge rb-air">AIR FREIGHT</span></td><td>India ↔ Middle East (UAE, Saudi, Qatar)</td><td class="rate-price">₹2,490/kg <span style="color:var(--muted);font-size:0.65rem;">($30)</span></td><td class="rate-time">2–4 Days</td><td>5 kg</td></tr>
+          <tr><td><span class="rbadge rb-air">AIR FREIGHT</span></td><td>Europe ↔ Americas</td><td class="rate-price">₹2,573/kg <span style="color:var(--muted);font-size:0.65rem;">($31)</span></td><td class="rate-time">3–5 Days</td><td>10 kg</td></tr>
+          <tr><td><span class="rbadge rb-ocean">OCEAN FCL</span></td><td>Asia ↔ Europe</td><td class="rate-price">₹99,600/20ft <span style="color:var(--muted);font-size:0.65rem;">($1,200)</span></td><td class="rate-time">18–25 Days</td><td>Full Container</td></tr>
+          <tr><td><span class="rbadge rb-ocean">OCEAN LCL</span></td><td>Worldwide</td><td class="rate-price">₹6,640/CBM <span style="color:var(--muted);font-size:0.65rem;">($80)</span></td><td class="rate-time">20–35 Days</td><td>0.5 CBM</td></tr>
+          <tr><td><span class="rbadge rb-road">ROAD FREIGHT</span></td><td>Europe & Central Asia</td><td class="rate-price">₹291/km/ton <span style="color:var(--muted);font-size:0.65rem;">($3.5)</span></td><td class="rate-time">5–14 Days</td><td>100 kg</td></tr>
+          <tr><td><span class="rbadge rb-air">SPECIAL CARGO</span></td><td>Hazmat / Perishable / Oversized — Worldwide</td><td class="rate-price">Custom Quote</td><td class="rate-time">As Required</td><td>Varies</td></tr>
+        </tbody>
+      </table>
+      <div class="rate-note-bar">⚠️ All rates shown in ₹ INR (1 USD = ₹83 approx). Final rate depends on fuel surcharges, current market conditions, customs duties, and special handling. Contact: <strong>+91 9930824005</strong> | <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2445494d500a574c455649451413131711644349454d480a474b49">[email&#160;protected]</a></div>
+    </div>
+
+    <!-- COUNTRIES -->
+    <div class="section-tag" style="margin-top:50px;">Global Coverage</div>
+    <h3 class="section-title" style="font-size:1.9rem;">195+ COUNTRIES — WE DELIVER EVERYWHERE</h3>
+    <p style="color:var(--muted);margin-bottom:36px;font-size:1rem;">We ship to every country in the world. Here is our full coverage by region:</p>
+
+    <div class="region-block">
+      <div class="region-title">🌏 Asia Pacific (24 Countries)</div>
+      <div class="countries-grid">
+        <span class="country-tag">India</span><span class="country-tag">China</span><span class="country-tag">Japan</span><span class="country-tag">South Korea</span><span class="country-tag">Singapore</span><span class="country-tag">Malaysia</span><span class="country-tag">Thailand</span><span class="country-tag">Indonesia</span><span class="country-tag">Vietnam</span><span class="country-tag">Philippines</span><span class="country-tag">Bangladesh</span><span class="country-tag">Pakistan</span><span class="country-tag">Sri Lanka</span><span class="country-tag">Nepal</span><span class="country-tag">Myanmar</span><span class="country-tag">Cambodia</span><span class="country-tag">Laos</span><span class="country-tag">Australia</span><span class="country-tag">New Zealand</span><span class="country-tag">Hong Kong</span><span class="country-tag">Taiwan</span><span class="country-tag">Maldives</span><span class="country-tag">Bhutan</span><span class="country-tag">Mongolia</span>
+      </div>
+    </div>
+    <div class="region-block">
+      <div class="region-title">🌍 Middle East (14 Countries)</div>
+      <div class="countries-grid">
+        <span class="country-tag">UAE</span><span class="country-tag">Saudi Arabia</span><span class="country-tag">Qatar</span><span class="country-tag">Kuwait</span><span class="country-tag">Bahrain</span><span class="country-tag">Oman</span><span class="country-tag">Jordan</span><span class="country-tag">Lebanon</span><span class="country-tag">Israel</span><span class="country-tag">Iraq</span><span class="country-tag">Iran</span><span class="country-tag">Yemen</span><span class="country-tag">Turkey</span><span class="country-tag">Cyprus</span>
+      </div>
+    </div>
+    <div class="region-block">
+      <div class="region-title">🌍 Africa (24+ Countries)</div>
+      <div class="countries-grid">
+        <span class="country-tag">South Africa</span><span class="country-tag">Nigeria</span><span class="country-tag">Kenya</span><span class="country-tag">Egypt</span><span class="country-tag">Ethiopia</span><span class="country-tag">Ghana</span><span class="country-tag">Tanzania</span><span class="country-tag">Morocco</span><span class="country-tag">Algeria</span><span class="country-tag">Tunisia</span><span class="country-tag">Uganda</span><span class="country-tag">Rwanda</span><span class="country-tag">Zambia</span><span class="country-tag">Zimbabwe</span><span class="country-tag">Mozambique</span><span class="country-tag">Senegal</span><span class="country-tag">Ivory Coast</span><span class="country-tag">Cameroon</span><span class="country-tag">Angola</span><span class="country-tag">Namibia</span><span class="country-tag">Botswana</span><span class="country-tag">Libya</span><span class="country-tag">Sudan</span><span class="country-tag">+ All African Nations</span>
+      </div>
+    </div>
+    <div class="region-block">
+      <div class="region-title">🌍 Europe (26+ Countries)</div>
+      <div class="countries-grid">
+        <span class="country-tag">Germany</span><span class="country-tag">UK</span><span class="country-tag">France</span><span class="country-tag">Italy</span><span class="country-tag">Spain</span><span class="country-tag">Netherlands</span><span class="country-tag">Belgium</span><span class="country-tag">Switzerland</span><span class="country-tag">Austria</span><span class="country-tag">Poland</span><span class="country-tag">Sweden</span><span class="country-tag">Norway</span><span class="country-tag">Denmark</span><span class="country-tag">Finland</span><span class="country-tag">Portugal</span><span class="country-tag">Greece</span><span class="country-tag">Czech Republic</span><span class="country-tag">Hungary</span><span class="country-tag">Romania</span><span class="country-tag">Bulgaria</span><span class="country-tag">Croatia</span><span class="country-tag">Serbia</span><span class="country-tag">Ukraine</span><span class="country-tag">Russia</span><span class="country-tag">Ireland</span><span class="country-tag">Luxembourg</span><span class="country-tag">+ All EU Nations</span>
+      </div>
+    </div>
+    <div class="region-block">
+      <div class="region-title">🌎 Americas (20+ Countries)</div>
+      <div class="countries-grid">
+        <span class="country-tag">USA</span><span class="country-tag">Canada</span><span class="country-tag">Mexico</span><span class="country-tag">Brazil</span><span class="country-tag">Argentina</span><span class="country-tag">Chile</span><span class="country-tag">Colombia</span><span class="country-tag">Peru</span><span class="country-tag">Venezuela</span><span class="country-tag">Ecuador</span><span class="country-tag">Bolivia</span><span class="country-tag">Uruguay</span><span class="country-tag">Paraguay</span><span class="country-tag">Panama</span><span class="country-tag">Costa Rica</span><span class="country-tag">Guatemala</span><span class="country-tag">Jamaica</span><span class="country-tag">Cuba</span><span class="country-tag">Dominican Republic</span><span class="country-tag">Trinidad & Tobago</span>
+      </div>
+    </div>
+    <div class="region-block">
+      <div class="region-title">🌐 Central Asia & CIS (10 Countries)</div>
+      <div class="countries-grid">
+        <span class="country-tag">Kazakhstan</span><span class="country-tag">Uzbekistan</span><span class="country-tag">Azerbaijan</span><span class="country-tag">Georgia</span><span class="country-tag">Armenia</span><span class="country-tag">Turkmenistan</span><span class="country-tag">Kyrgyzstan</span><span class="country-tag">Tajikistan</span><span class="country-tag">Belarus</span><span class="country-tag">Moldova</span>
+      </div>
+    </div>
+
+    <div style="margin-top:28px;padding:18px 22px;background:var(--surface);border:1px solid rgba(0,212,255,0.2);font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:2px;color:var(--muted);">
+      🌍 Don't see your country listed? <strong style="color:var(--accent);">We deliver to EVERY country in the world.</strong> Call us: <a href="tel:+919930824005" style="color:var(--accent2);">+91 9930824005</a>
+    </div>
+  </div>
+</section>
+
+<!-- TRACKING -->
+<section id="tracking" class="page">
+  <div class="section">
+    <div class="section-tag">Live Tracking</div>
+    <h2 class="section-title">TRACK YOUR SHIPMENT</h2>
+    <p class="section-sub">AI-powered real-time visibility into every stage of your cargo's journey. Enter your Nexus tracking number below.</p>
+    <div class="ai-bar"><div class="ai-dot"></div><span class="ai-txt">AI tracking engine active — monitoring all shipments 24/7</span></div>
+    <div class="tracking-box">
+      <div class="track-input-row">
+        <input type="text" class="track-input" id="trackInput" placeholder="ENTER TRACKING NUMBER  (e.g. NXG-2024-001847)">
+        <button class="track-btn" onclick="doTrack()">TRACK NOW</button>
+      </div>
+      <div class="track-result" id="trackResult">
+        <div class="track-timeline">
+          <div class="track-step"><div class="tdot done"></div><div class="tinfo"><h4>ORDER RECEIVED & CONFIRMED</h4><p>Shipment booked — documentation processed</p><p class="ttime">2024-03-01  09:14</p></div></div>
+          <div class="track-step"><div class="tdot done"></div><div class="tinfo"><h4>CUSTOMS CLEARANCE</h4><p>AI-automated export declaration filed and approved</p><p class="ttime">2024-03-02  14:33</p></div></div>
+          <div class="track-step"><div class="tdot done"></div><div class="tinfo"><h4>DEPARTED ORIGIN</h4><p>Cargo picked up and departed origin facility</p><p class="ttime">2024-03-03  23:10</p></div></div>
+          <div class="track-step"><div class="tdot active"></div><div class="tinfo"><h4>IN TRANSIT — CURRENT LOCATION ✦</h4><p>Cargo at international hub — ETA destination in 14 hours</p><p class="ttime">AI ETA: March 5, 16:00 local time</p></div></div>
+          <div class="track-step"><div class="tdot"></div><div class="tinfo"><h4>ARRIVAL AT DESTINATION COUNTRY</h4><p>Expected arrival and import customs clearance</p><p class="ttime">AI Predicted: March 5</p></div></div>
+          <div class="track-step"><div class="tdot"></div><div class="tinfo"><h4>FINAL DELIVERY TO RECIPIENT</h4><p>Last-mile delivery to your address</p><p class="ttime">AI Predicted: March 6, 10:00–14:00</p></div></div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:26px;padding:18px 28px;background:var(--surface);border:1px solid var(--border);display:flex;gap:28px;align-items:center;flex-wrap:wrap;">
+      <span style="font-family:'Space Mono',monospace;font-size:0.62rem;letter-spacing:3px;color:var(--muted);">NEED TRACKING HELP?</span>
+      <a href="tel:+919930824005" style="font-family:'Space Mono',monospace;font-size:0.72rem;color:var(--accent2);text-decoration:none;">📞 +91 9930824005</a>
+      <a href="/cdn-cgi/l/email-protection#3554585c411b465d544758540502020600755258545c591b565a58" style="font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--accent);text-decoration:none;">✉️ <span class="__cf_email__" data-cfemail="ff9e92968bd18c979e8d929ecfc8c8cccabf98929e9693d19c9092">[email&#160;protected]</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section id="quote" class="page">
+  <div class="section">
+    <div class="section-tag">Instant AI Quote</div>
+    <h2 class="section-title">GET YOUR INSTANT QUOTE</h2>
+    <p class="section-sub">AI pricing engine calculates your rate instantly in ₹ INR and $. All quotes start from ₹2,490/kg ($30) and are adjusted based on your exact logistics requirements.</p>
+    <div class="quote-grid">
+      <div class="quote-left">
+        <div class="form-group">
+          <label class="form-label">Service Type</label>
+          <select class="form-select" id="qSvc" onchange="calcQ()">
+            <option value="express">Express Courier (1–3 Days) — From ₹2,490/kg ($30)</option>
+            <option value="air">Air Freight (3–7 Days) — From ₹2,490/kg ($30)</option>
+            <option value="ocean">Ocean Freight (18–35 Days) — From ₹6,640/CBM ($80)</option>
+            <option value="road">Road Freight (5–14 Days)</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Origin Country</label>
+            <select class="form-select" id="qOrig" onchange="calcQ()">
+              <option value="in">India</option><option value="cn">China</option><option value="us">USA</option><option value="de">Germany</option><option value="ae">UAE</option><option value="uk">UK</option><option value="sg">Singapore</option><option value="jp">Japan</option><option value="au">Australia</option><option value="other">Other Country</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Destination</label>
+            <select class="form-select" id="qDest" onchange="calcQ()">
+              <option value="us">USA</option><option value="de">Germany</option><option value="uk">UK</option><option value="au">Australia</option><option value="ae">UAE</option><option value="cn">China</option><option value="br">Brazil</option><option value="za">South Africa</option><option value="ng">Nigeria</option><option value="jp">Japan</option><option value="sa">Saudi Arabia</option><option value="ca">Canada</option><option value="fr">France</option><option value="other">Other Country</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Weight (kg)</label><input type="number" class="form-input" id="qWt" value="50" min="1" oninput="calcQ()"></div>
+          <div class="form-group"><label class="form-label">Volume (CBM)</label><input type="number" class="form-input" id="qVol" value="0.5" min="0.1" step="0.1" oninput="calcQ()"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cargo Type</label>
+          <select class="form-select" id="qCargo" onchange="calcQ()">
+            <option value="general">General Cargo</option><option value="hazmat">Hazardous Materials (+90%)</option><option value="perishable">Perishable Goods (+60%)</option><option value="valuable">High-Value Goods (+70%)</option><option value="oversized">Oversized Cargo (+80%)</option>
+          </select>
+        </div>
+        <div style="padding:13px 15px;background:var(--bg2);border:1px solid rgba(255,107,53,0.2);font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:2px;color:var(--muted);">
+          For exact pricing call us: <a href="tel:+919930824005" style="color:var(--accent2);">📞 +91 9930824005</a>
+        </div>
+      </div>
+      <div class="quote-right">
+        <div style="font-family:'Space Mono',monospace;font-size:0.55rem;letter-spacing:3px;color:var(--accent);margin-bottom:18px;text-transform:uppercase;">AI Quote Engine — From ₹2,490/kg ($30)</div>
+        <div class="quote-amount" id="qTotal">$1,500</div>
+        <div class="quote-lbl">Estimated Total Cost</div>
+        <div style="width:100%;margin-bottom:26px;">
+          <div class="brow"><span>Freight Cost</span><span class="bval" id="bFreight">$1,100</span></div>
+          <div class="brow"><span>Fuel Surcharge (15%)</span><span class="bval" id="bFuel">$165</span></div>
+          <div class="brow"><span>Customs & Handling (12%)</span><span class="bval" id="bCust">$132</span></div>
+          <div class="brow"><span>Insurance (5%)</span><span class="bval" id="bIns">$55</span></div>
+          <div class="brow"><span>Transit Time</span><span class="bval" id="bTime" style="color:var(--accent3);">1–3 Days</span></div>
+        </div>
+        <button class="btn-primary" style="width:100%;margin-bottom:14px;" onclick="showNotif('Quote request sent! Our team will contact you within 2 hours.')">BOOK THIS SHIPMENT</button>
+        <a href="tel:+919930824005" style="font-family:'Space Mono',monospace;font-size:0.62rem;letter-spacing:2px;color:var(--accent2);text-decoration:none;">📞 Call for Custom Quote: +91 9930824005</a>
+        <div style="margin-top:12px;font-family:'Space Mono',monospace;font-size:0.55rem;letter-spacing:2px;color:var(--muted);">1 USD = ₹83 · Rate as of 2024</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="page">
+  <div class="section">
+    <div class="section-tag">Get In Touch</div>
+    <h2 class="section-title">CONTACT OUR TEAM</h2>
+    <p class="section-sub">Available 24/7 — call, email, or fill the form. We respond within 2 hours guaranteed.</p>
+
+    <div class="ebar">
+      <span class="elabel">⚡ DIRECT CONTACT</span>
+      <span class="eitem">📞 <a href="tel:+919930824005">+91 9930824005</a></span>
+      <span class="eitem">✉️ <a href="/cdn-cgi/l/email-protection#06676b6f7228756e67746b67363131353346616b676f6a2865696b" style="color:var(--accent);"><span class="__cf_email__" data-cfemail="c2a3afabb6ecb1aaa3b0afa3f2f5f5f1f782a5afa3abaeeca1adaf">[email&#160;protected]</span></a></span>
+      <span class="eitem" style="color:var(--muted);">🕐 24/7 Operations</span>
+    </div>
+
+    <div class="contact-wrap">
+      <div class="contact-left">
+        <div class="citem"><div class="cicon">📞</div><div class="cdet"><h4>Customer Service</h4><p><a href="tel:+919930824005">+91 9930824005</a></p><p>Available 24 hours, 7 days a week<br>Call us anytime for instant support</p></div></div>
+        <div class="citem"><div class="cicon">✉️</div><div class="cdet"><h4>Email Us</h4><p><a href="/cdn-cgi/l/email-protection#52333f3b267c213a33203f33626565616712353f333b3e7c313d3f"><span class="__cf_email__" data-cfemail="3b5a56524f1548535a49565a0b0c0c080e7b5c565a525715585456">[email&#160;protected]</span></a></p><p>We reply within 2 hours guaranteed</p></div></div>
+        <div class="citem"><div class="cicon">🌍</div><div class="cdet"><h4>Global Coverage</h4><p>195+ Countries Worldwide</p><p>Every continent, every destination — no location is too far</p></div></div>
+        <div class="citem"><div class="cicon">💰</div><div class="cdet"><h4>Our Rates</h4><p style="font-family:'Orbitron',monospace;font-size:1rem;color:var(--accent);">₹2,490/kg <span style="font-size:0.7rem;color:var(--muted);">($30)</span></p><p>As per your logistics requirements<br>Custom quotes available</p></div></div>
+        <div class="citem"><div class="cicon">🕐</div><div class="cdet"><h4>Business Hours</h4><p>Operations: 24/7/365</p><p>Sales & Support: Mon–Sat, 9AM–8PM IST</p></div></div>
+      </div>
+      <div class="contact-right">
+        <div class="form-row" style="margin-bottom:20px;">
+          <div class="form-group" style="margin-bottom:0;"><label class="form-label">First Name</label><input type="text" class="form-input" placeholder="Your First Name"></div>
+          <div class="form-group" style="margin-bottom:0;"><label class="form-label">Last Name</label><input type="text" class="form-input" placeholder="Your Last Name"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Company Name</label><input type="text" class="form-input" placeholder="Your Company / Organization"></div>
+        <div class="form-group"><label class="form-label">Email Address</label><input type="email" class="form-input" placeholder="your@email.com"></div>
+        <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" class="form-input" placeholder="+91 / +1 / +44 ..."></div>
+        <div class="form-group">
+          <label class="form-label">Inquiry Type</label>
+          <select class="form-select">
+            <option>Freight Quote Request</option><option>Shipment Tracking Help</option><option>Customs & Documentation</option><option>Ocean / Air / Road Freight</option><option>Partnership Inquiry</option><option>Complaint / Feedback</option><option>General Inquiry</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" placeholder="Tell us about your shipment — origin, destination, weight, dimensions, and any special requirements..."></textarea></div>
+        <button class="submit-btn" onclick="showNotif('Message sent to amit.sharma07735@gmail.com! We will reply within 2 hours.')">SEND MESSAGE →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <div class="logo">NEXUS<span>.</span>GLOBAL<span class="sub">LOGISTIC SOLUTION</span></div>
+      <p>AI-powered international logistics connecting businesses across 195+ countries. Rates starting from ₹2,490/kg ($30) with real-time tracking and 24/7 customer support.</p>
+      <div class="foot-contacts">
+        <a href="tel:+919930824005">📞 +91 9930824005 (24/7)</a>
+        <a href="/cdn-cgi/l/email-protection#4a2b27233e6439222b38272b7a7d7d797f0a2d272b232664292527">✉️ <span class="__cf_email__" data-cfemail="10717d79643e637871627d71202727232550777d71797c3e737f7d">[email&#160;protected]</span></a>
+      </div>
+    </div>
+    <div class="foot-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#" onclick="showPage('services')">Air Freight — $30/kg</a></li>
+        <li><a href="#" onclick="showPage('services')">Ocean Freight</a></li>
+        <li><a href="#" onclick="showPage('services')">Road Freight</a></li>
+        <li><a href="#" onclick="showPage('services')">Warehousing</a></li>
+        <li><a href="#" onclick="showPage('services')">Customs Brokerage</a></li>
+        <li><a href="#" onclick="showPage('services')">Last-Mile Delivery</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#" onclick="showPage('tracking')">Track Shipment</a></li>
+        <li><a href="#" onclick="showPage('quote')">Get Free Quote</a></li>
+        <li><a href="#" onclick="showPage('rates')">View Rates</a></li>
+        <li><a href="#" onclick="showPage('rates')">Countries We Serve</a></li>
+        <li><a href="#" onclick="showPage('contact')">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:+919930824005">📞 +91 9930824005</a></li>
+        <li><a href="/cdn-cgi/l/email-protection#e98884809dc79a81889b8488d9dededadca98e84888085c78a8684">✉️ Email Us</a></li>
+        <li><a href="#" onclick="document.getElementById('chatPanel').classList.add('open')">💬 AI Chat Support</a></li>
+        <li><a href="#" onclick="showPage('rates')">🌍 195+ Countries</a></li>
+        <li><a href="#" onclick="showPage('rates')">From ₹2,490/kg ($30)</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <p>© 2024 Nexus Global Logistic Solution · +91 9930824005 · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c2a3afabb6ecb1aaa3b0afa3f2f5f5f1f782a5afa3abaeeca1adaf">[email&#160;protected]</a></p>
+    <p>195+ Countries · Starting ₹2,490/kg ($30) · 24/7 Support</p>
+  </div>
+</footer>
+
+<!-- AI CHAT -->
+<div class="chat-widget">
+  <div class="chat-panel" id="chatPanel">
+    <div class="chat-head"><div class="ai-dot"></div><h4>NEXUS AI ASSISTANT</h4></div>
+    <div class="chat-msgs" id="chatMsgs">
+      <div class="cmsg bot">Hello! I'm the Nexus Global AI assistant. Our rates start from ₹2,490/kg ($30) to 195+ countries. Need a quote or tracking help? Just ask! Call +91 9930824005 anytime.</div>
+    </div>
+    <div class="chat-input-row">
+      <input type="text" class="chat-input" id="chatIn" placeholder="Ask about rates, tracking, countries..." onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="chat-send" onclick="sendChat()">↑</button>
+    </div>
+  </div>
+  <button class="chat-btn" onclick="toggleChat()">🤖</button>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  
+  document.addEventListener('mouseleave', () => { cur.style.opacity='0'; ring.style.opacity='0'; });
+  document.addEventListener('mouseenter', () => { cur.style.opacity='1'; ring.style.opacity='1'; });
+
+  // Navigation
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  // Tracking
+  function doTrack() {
+    const v = document.getElementById('trackInput').value.trim();
+    if (!v) { showNotif('Please enter a tracking number'); return; }
+    const r = document.getElementById('trackResult');
+    r.style.display = 'none';
+    setTimeout(() => { r.style.display = 'block'; }, 400);
+    showNotif('Shipment found! Showing live status below.');
+  }
+
+  // Quote Calculator — base $30/kg
+  const svcRates = { express:{b:30,t:'1–3 Days'}, air:{b:30,t:'3–7 Days'}, ocean:{b:5,t:'18–35 Days'}, road:{b:12,t:'5–14 Days'} };
+  const rm = {'in-us':1.4,'in-de':1.3,'in-uk':1.3,'in-ae':0.9,'in-au':1.2,'in-cn':1.0,'in-br':1.5,'in-za':1.4,'in-ng':1.5,'in-jp':1.1,'in-sa':0.9,'in-ca':1.4,'in-fr':1.3,'cn-us':1.4,'cn-de':1.2,'us-de':1.1,'ae-us':1.3,'de-us':1.1};
+  const cm = {general:1,hazmat:1.9,perishable:1.6,valuable:1.7,oversized:1.8};
+
+  const INR = 83;
+  function calcQ() {
+    const s = document.getElementById('qSvc').value;
+    const wt = parseFloat(document.getElementById('qWt').value)||50;
+    const vol = parseFloat(document.getElementById('qVol').value)||0.5;
+    const cg = document.getElementById('qCargo').value;
+    const orig = document.getElementById('qOrig').value;
+    const dest = document.getElementById('qDest').value;
+    const r = svcRates[s];
+    const routeM = rm[orig+'-'+dest] || 1.2;
+    const cargoM = cm[cg];
+    const chargeable = Math.max(wt, vol*167);
+    const freight = Math.round(chargeable * r.b * routeM * cargoM);
+    const fuel = Math.round(freight*0.15);
+    const cust = Math.round(freight*0.12);
+    const ins = Math.round(freight*0.05);
+    const total = freight+fuel+cust+ins;
+    const fmt = (usd) => '₹'+(usd*INR).toLocaleString('en-IN')+' <span style="color:var(--muted);font-size:0.7rem;">($'+usd.toLocaleString()+')</span>';
+    document.getElementById('qTotal').innerHTML = '₹'+(total*INR).toLocaleString('en-IN')+'<br><span style="font-size:0.9rem;color:var(--muted);">$'+total.toLocaleString()+'</span>';
+    document.getElementById('bFreight').innerHTML = fmt(freight);
+    document.getElementById('bFuel').innerHTML = fmt(fuel);
+    document.getElementById('bCust').innerHTML = fmt(cust);
+    document.getElementById('bIns').innerHTML = fmt(ins);
+    document.getElementById('bTime').textContent = r.t;
+  }
+
+  // Notification
+  function showNotif(msg) {
+    const n = document.getElementById('notif');
+    n.textContent = msg; n.classList.add('show');
+    setTimeout(() => n.classList.remove('show'), 4200);
+  }
+
+  // Chat
+  function toggleChat() { document.getElementById('chatPanel').classList.toggle('open'); }
+  const replies = {
+    rate: "Our rates start from ₹2,490/kg ($30) for air & express worldwide. Ocean freight from ₹6,640/CBM ($80). Final rate depends on destination, weight, cargo type. All prices in INR (1 USD = ₹83). Call +91 9930824005 for exact quote!",
+    track: "Go to our Tracking page and enter your Nexus tracking number. Need help? Call us 24/7 at +91 9930824005 or email amit.sharma07735@gmail.com",
+    country: "We deliver to 195+ countries worldwide — every single continent and nation! Asia, Europe, Americas, Africa, Middle East, Pacific. If you have a destination in mind, we cover it.",
+    contact: "📞 +91 9930824005 (24/7 available)\n✉️ amit.sharma07735@gmail.com\nWe respond within 2 hours!",
+    service: "We offer: Air Freight, Ocean Freight, Road Freight, Express Courier, Warehousing, Customs Brokerage, and Last-Mile Delivery — all AI-powered and available worldwide.",
+    time: "Transit times: Express 1–3 days,
