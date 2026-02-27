@@ -3,986 +3,162 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shipping Rate Calculator — Nexus Global Logistic Solution</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<title>Nexus Logistics - Rate Calculator</title>
+
 <style>
-  :root {
-    --bg:       #050810;
-    --bg2:      #080d1a;
-    --surface:  #0d1428;
-    --surface2: #111c35;
-    --accent:   #00d4ff;
-    --accent2:  #ff6b35;
-    --accent3:  #39ff14;
-    --gold:     #ffc800;
-    --text:     #e8edf5;
-    --muted:    #5a6a8a;
-    --border:   rgba(0,212,255,0.15);
-    --glow:     0 0 24px rgba(0,212,255,0.35);
-  }
 
-  * { margin:0; padding:0; box-sizing:border-box; }
-  html { scroll-behavior:smooth; }
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+  margin: 0;
+  padding: 0;
+}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Rajdhani', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+header {
+  background: #0d47a1;
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
 
-  /* Grid background */
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image:
-      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
-    background-size: 50px 50px;
-    pointer-events: none;
-    z-index: 0;
-  }
+.container {
+  max-width: 500px;
+  margin: 30px auto;
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
 
-  /* Radial glow */
-  body::after {
-    content: '';
-    position: fixed;
-    top: -20%; left: 50%;
-    transform: translateX(-50%);
-    width: 800px; height: 600px;
-    background: radial-gradient(ellipse, rgba(0,212,255,0.06) 0%, transparent 65%);
-    pointer-events: none;
-    z-index: 0;
-  }
+h2 {
+  text-align: center;
+}
 
-  .wrapper {
-    position: relative;
-    z-index: 1;
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 50px 24px 80px;
-  }
+label {
+  font-weight: bold;
+}
 
-  /* ── HEADER ── */
-  .calc-header {
-    text-align: center;
-    margin-bottom: 48px;
-    animation: fadeUp 0.7s ease both;
-  }
+input, select, button {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
 
-  .brand-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 18px;
-  }
-  .brand-tag::before,
-  .brand-tag::after { content: ''; width: 30px; height: 1px; background: var(--accent); }
+button {
+  background: #0d47a1;
+  color: white;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
 
-  .calc-title {
-    font-family: 'Orbitron', monospace;
-    font-size: clamp(1.6rem, 4vw, 2.8rem);
-    font-weight: 900;
-    letter-spacing: 2px;
-    line-height: 1.1;
-    margin-bottom: 14px;
-  }
-  .calc-title span { color: var(--accent); }
+button:hover {
+  background: #1565c0;
+}
 
-  .calc-subtitle {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 3px;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
+.result {
+  background: #e8f5e9;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
 
-  /* ── MAIN CARD ── */
-  .calc-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    position: relative;
-    animation: fadeUp 0.7s 0.15s ease both;
-    box-shadow: 0 0 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(0,212,255,0.08);
-  }
-
-  .calc-card::before {
-    content: 'RATE CALCULATOR v2.4';
-    position: absolute;
-    top: -10px; left: 28px;
-    background: var(--surface);
-    padding: 0 12px;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.55rem;
-    letter-spacing: 4px;
-    color: var(--accent2);
-    text-transform: uppercase;
-  }
-
-  .card-top-bar {
-    background: var(--surface2);
-    border-bottom: 1px solid var(--border);
-    padding: 14px 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .card-top-bar .dots { display:flex; gap:8px; }
-  .dot { width:10px; height:10px; border-radius:50%; }
-  .dot.r { background:#ff5f57; }
-  .dot.y { background:#febc2e; }
-  .dot.g { background:#28c840; }
-  .card-top-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.58rem;
-    letter-spacing: 3px;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
-
-  .calc-body { padding: 36px 36px 28px; }
-
-  /* ── FORM LAYOUT ── */
-  .form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 22px;
-    margin-bottom: 22px;
-  }
-  .form-group { display: flex; flex-direction: column; gap: 9px; }
-  .form-group.full { grid-column: 1 / -1; }
-
-  .field-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.58rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .field-label .lnum {
-    width: 18px; height: 18px;
-    border: 1px solid rgba(0,212,255,0.3);
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.5rem;
-    color: var(--accent);
-    flex-shrink: 0;
-  }
-
-  .field-select,
-  .field-input {
-    background: var(--bg2);
-    border: 1px solid rgba(0,212,255,0.12);
-    padding: 14px 16px;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 1rem;
-    color: var(--text);
-    outline: none;
-    transition: border-color 0.25s, box-shadow 0.25s;
-    appearance: none;
-    width: 100%;
-  }
-  .field-select:focus,
-  .field-input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(0,212,255,0.08);
-  }
-  .field-select option { background: #0d1428; }
-
-  .select-wrap { position: relative; }
-  .select-wrap::after {
-    content: '▼';
-    position: absolute;
-    right: 14px; top: 50%;
-    transform: translateY(-50%);
-    font-size: 0.6rem;
-    color: var(--accent);
-    pointer-events: none;
-  }
-
-  /* Weight input special */
-  .weight-wrap { position: relative; }
-  .weight-wrap .unit {
-    position: absolute;
-    right: 14px; top: 50%;
-    transform: translateY(-50%);
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 2px;
-    color: var(--accent);
-    pointer-events: none;
-  }
-  .field-input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
-
-  /* ── TOGGLE BUTTONS (Shipment Type & Speed) ── */
-  .toggle-group {
-    display: flex;
-    gap: 2px;
-    background: rgba(0,212,255,0.05);
-    border: 1px solid var(--border);
-    padding: 3px;
-  }
-  .toggle-btn {
-    flex: 1;
-    padding: 11px 8px;
-    background: transparent;
-    border: none;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.58rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.25s;
-    position: relative;
-    text-align: center;
-  }
-  .toggle-btn.active {
-    background: var(--accent);
-    color: var(--bg);
-    font-weight: 700;
-  }
-  .toggle-btn.active-orange {
-    background: var(--accent2);
-    color: #fff;
-    font-weight: 700;
-  }
-  .toggle-btn:hover:not(.active):not(.active-orange) { color: var(--text); background: rgba(255,255,255,0.04); }
-
-  .toggle-icon { display: block; font-size: 1rem; margin-bottom: 3px; }
-
-  /* ── ZONE BADGE ── */
-  .zone-indicator {
-    display: none;
-    margin-top: 8px;
-    padding: 8px 14px;
-    border-left: 3px solid var(--accent);
-    background: rgba(0,212,255,0.05);
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 2px;
-    color: var(--accent);
-    animation: fadeUp 0.3s ease;
-  }
-  .zone-indicator.show { display: block; }
-  .zone-indicator .zone-rate { color: var(--accent2); }
-
-  /* ── CALCULATE BUTTON ── */
-  .calc-btn-wrap { margin-top: 8px; }
-  .calc-btn {
-    width: 100%;
-    background: var(--accent);
-    color: var(--bg);
-    border: none;
-    padding: 18px;
-    font-family: 'Orbitron', monospace;
-    font-size: 0.82rem;
-    font-weight: 700;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: box-shadow 0.3s;
-  }
-  .calc-btn::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%;
-    width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-    transition: left 0.5s;
-  }
-  .calc-btn:hover { box-shadow: 0 0 40px rgba(0,212,255,0.5); }
-  .calc-btn:hover::before { left: 100%; }
-  .calc-btn:active { transform: scale(0.99); }
-
-  /* ── RESULT PANEL ── */
-  .result-panel {
-    display: none;
-    margin-top: 28px;
-    border: 1px solid rgba(0,212,255,0.2);
-    background: linear-gradient(135deg, rgba(0,212,255,0.04), rgba(0,0,0,0.2));
-    position: relative;
-    overflow: hidden;
-    animation: resultReveal 0.5s ease;
-  }
-  .result-panel.show { display: block; }
-
-  .result-panel::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
-  }
-
-  .result-top {
-    padding: 28px 28px 20px;
-    text-align: center;
-    border-bottom: 1px solid rgba(0,212,255,0.08);
-  }
-
-  .result-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 4px;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-
-  .result-amount {
-    font-family: 'Orbitron', monospace;
-    font-size: clamp(2.4rem, 6vw, 4rem);
-    font-weight: 900;
-    color: var(--accent);
-    text-shadow: 0 0 30px rgba(0,212,255,0.4);
-    letter-spacing: 2px;
-    line-height: 1;
-    margin-bottom: 6px;
-  }
-
-  .result-usd {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 2px;
-    color: var(--muted);
-  }
-
-  /* Breakdown */
-  .result-breakdown {
-    padding: 20px 28px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-  }
-
-  .breakdown-item {
-    padding: 10px 14px;
-    border-bottom: 1px solid rgba(0,212,255,0.05);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.9rem;
-  }
-  .breakdown-item:nth-child(odd) { border-right: 1px solid rgba(0,212,255,0.05); }
-  .breakdown-item.discount { color: var(--accent3); }
-  .breakdown-item.surcharge { color: var(--accent2); }
-  .breakdown-item.total-row {
-    grid-column: 1 / -1;
-    border-bottom: none;
-    border-top: 1px solid rgba(0,212,255,0.15);
-    font-family: 'Space Mono', monospace;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    padding: 14px;
-    color: var(--accent);
-  }
-
-  .bval {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: var(--text);
-  }
-  .bval.green { color: var(--accent3); }
-  .bval.orange { color: var(--accent2); }
-  .bval.cyan { color: var(--accent); }
-
-  /* Tags row */
-  .result-tags {
-    padding: 0 28px 20px;
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .rtag {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.55rem;
-    letter-spacing: 2px;
-    padding: 5px 12px;
-    border: 1px solid;
-    text-transform: uppercase;
-  }
-  .rtag.zone  { border-color: rgba(0,212,255,0.3); color: var(--accent); background: rgba(0,212,255,0.06); }
-  .rtag.speed { border-color: rgba(255,107,53,0.3); color: var(--accent2); background: rgba(255,107,53,0.06); }
-  .rtag.type  { border-color: rgba(57,255,20,0.3); color: var(--accent3); background: rgba(57,255,20,0.06); }
-
-  /* Disclaimer */
-  .disclaimer {
-    margin: 0 28px 24px;
-    padding: 12px 16px;
-    background: rgba(255,200,0,0.05);
-    border-left: 3px solid var(--gold);
-    font-family: 'Space Mono', monospace;
-    font-size: 0.58rem;
-    letter-spacing: 1.5px;
-    color: var(--gold);
-    line-height: 1.8;
-    text-transform: uppercase;
-  }
-
-  /* CTA */
-  .result-cta {
-    padding: 0 28px 28px;
-    display: flex;
-    gap: 10px;
-  }
-  .cta-btn {
-    flex: 1;
-    padding: 13px;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s;
-    text-align: center;
-    text-decoration: none;
-    display: block;
-  }
-  .cta-primary { background: var(--accent2); color: #fff; }
-  .cta-primary:hover { box-shadow: 0 0 20px rgba(255,107,53,0.4); }
-  .cta-secondary { background: transparent; border: 1px solid var(--border); color: var(--muted); }
-  .cta-secondary:hover { border-color: var(--accent); color: var(--accent); }
-
-  /* ── ZONE REFERENCE TABLE ── */
-  .zone-ref {
-    margin-top: 32px;
-    border: 1px solid var(--border);
-    position: relative;
-    animation: fadeUp 0.7s 0.3s ease both;
-  }
-  .zone-ref::before {
-    content: 'ZONE RATE REFERENCE';
-    position: absolute;
-    top: -10px; left: 22px;
-    background: var(--bg);
-    padding: 0 10px;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.55rem;
-    letter-spacing: 4px;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
-  .zone-table { width: 100%; border-collapse: collapse; }
-  .zone-table th {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.56rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--accent);
-    padding: 14px 18px;
-    text-align: left;
-    background: var(--surface2);
-    border-bottom: 1px solid var(--border);
-  }
-  .zone-table td {
-    padding: 12px 18px;
-    font-size: 0.9rem;
-    border-bottom: 1px solid rgba(0,212,255,0.04);
-    color: var(--muted);
-  }
-  .zone-table tr:last-child td { border-bottom: none; }
-  .zone-table tr:hover td { background: rgba(0,212,255,0.02); }
-  .zone-num {
-    font-family: 'Orbitron', monospace;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-  }
-  .z1 { color: var(--accent3); }
-  .z2 { color: var(--accent); }
-  .z3 { color: var(--gold); }
-  .z4 { color: var(--accent2); }
-  .zrate {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.72rem;
-    font-weight: 700;
-  }
-
-  /* ── FOOTER ── */
-  .calc-footer {
-    text-align: center;
-    margin-top: 40px;
-    animation: fadeUp 0.7s 0.4s ease both;
-  }
-  .calc-footer p {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.58rem;
-    letter-spacing: 2px;
-    color: var(--muted);
-    text-transform: uppercase;
-    line-height: 2;
-  }
-  .calc-footer a { color: var(--accent2); text-decoration: none; }
-  .calc-footer a:hover { color: var(--accent); }
-
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity:0; transform: translateY(24px); }
-    to   { opacity:1; transform: translateY(0); }
-  }
-  @keyframes resultReveal {
-    from { opacity:0; transform: scaleY(0.95); transform-origin: top; }
-    to   { opacity:1; transform: scaleY(1); }
-  }
-  @keyframes pulse {
-    0%,100% { opacity:1; }
-    50%      { opacity:0.5; }
-  }
-
-  /* ── LIVE INDICATOR ── */
-  .live-bar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 28px;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.58rem;
-    letter-spacing: 3px;
-    color: var(--accent3);
-    text-transform: uppercase;
-    animation: fadeUp 0.7s 0.05s ease both;
-  }
-  .live-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--accent3);
-    box-shadow: 0 0 8px var(--accent3);
-    animation: pulse 1.5s infinite;
-  }
-
-  /* ── RESPONSIVE ── */
-  @media(max-width: 600px) {
-    .form-grid { grid-template-columns: 1fr; }
-    .calc-body { padding: 24px 18px; }
-    .result-breakdown { grid-template-columns: 1fr; }
-    .breakdown-item:nth-child(odd) { border-right: none; }
-    .result-cta { flex-direction: column; }
-    .zone-table td, .zone-table th { padding: 10px 12px; font-size: 0.8rem; }
-  }
 </style>
 </head>
+
 <body>
 
-<div class="wrapper">
+<header>
+<h1>Nexus Logistics</h1>
+<p>International Courier Rate Calculator</p>
+</header>
 
-  <!-- HEADER -->
-  <div class="calc-header">
-    <div class="brand-tag">Nexus Global Logistic Solution</div>
-    <h1 class="calc-title">INTERNATIONAL<br><span>RATE CALCULATOR</span></h1>
-    <p class="calc-subtitle">Real-time shipping cost estimate — 195+ countries</p>
-  </div>
+<div class="container">
 
-  <!-- LIVE INDICATOR -->
-  <div class="live-bar">
-    <div class="live-dot"></div>
-    AI Pricing Engine Active — Rates Updated Daily
-  </div>
+<h2>Calculate Shipping Cost</h2>
 
-  <!-- MAIN CALCULATOR CARD -->
-  <div class="calc-card">
-    <div class="card-top-bar">
-      <div class="dots">
-        <div class="dot r"></div>
-        <div class="dot y"></div>
-        <div class="dot g"></div>
-      </div>
-      <div class="card-top-label">nexus_rate_engine.exe</div>
-    </div>
+<label>Destination</label>
+<select id="country">
+<option value="zoneA">USA / Canada</option>
+<option value="zoneB">UK / Europe</option>
+<option value="zoneC">Middle East</option>
+<option value="zoneD">Asia</option>
+<option value="zoneE">Rest of World</option>
+</select>
 
-    <div class="calc-body">
+<label>Actual Weight (Kg)</label>
+<input type="number" id="weight" placeholder="Enter weight">
 
-      <div class="form-grid">
+<h3>Package Dimensions (cm)</h3>
+<input type="number" id="length" placeholder="Length">
+<input type="number" id="width" placeholder="Width">
+<input type="number" id="height" placeholder="Height">
 
-        <!-- 1. DESTINATION -->
-        <div class="form-group full">
-          <label class="field-label"><span class="lnum">1</span> Destination Country</label>
-          <div class="select-wrap">
-            <select class="field-select" id="destination" onchange="updateZoneInfo()">
-              <option value="">— Select destination country —</option>
-              <optgroup label="Zone 1 — Asia / Gulf (₹900/kg)">
-                <option value="1|UAE">UAE</option>
-                <option value="1|Singapore">Singapore</option>
-                <option value="1|Malaysia">Malaysia</option>
-                <option value="1|Thailand">Thailand</option>
-              </optgroup>
-              <optgroup label="Zone 2 — Europe (₹1,400/kg)">
-                <option value="2|UK">UK</option>
-                <option value="2|Germany">Germany</option>
-                <option value="2|France">France</option>
-                <option value="2|Italy">Italy</option>
-                <option value="2|Netherlands">Netherlands</option>
-              </optgroup>
-              <optgroup label="Zone 3 — North America (₹1,600/kg)">
-                <option value="3|USA">USA</option>
-                <option value="3|Canada">Canada</option>
-              </optgroup>
-              <optgroup label="Zone 4 — Oceania / Others (₹1,800/kg)">
-                <option value="4|Australia">Australia</option>
-                <option value="4|New Zealand">New Zealand</option>
-                <option value="4|Others">Other Countries</option>
-              </optgroup>
-            </select>
-          </div>
-          <div class="zone-indicator" id="zoneInfo"></div>
-        </div>
+<label>Service</label>
+<select id="service">
+<option value="express">Express</option>
+<option value="economy">Economy</option>
+</select>
 
-        <!-- 2. WEIGHT -->
-        <div class="form-group">
-          <label class="field-label"><span class="lnum">2</span> Shipment Weight</label>
-          <div class="weight-wrap">
-            <input type="number" class="field-input" id="weight"
-              placeholder="Enter weight" min="0.1" step="0.1" oninput="updateWeightHint()">
-            <span class="unit">KG</span>
-          </div>
-          <div class="zone-indicator" id="weightHint"></div>
-        </div>
+<button onclick="calculate()">Calculate Rate</button>
 
-        <!-- SPACER on desktop filled by weight hint -->
-        <div class="form-group" style="justify-content:flex-end;">
-          <label class="field-label"><span class="lnum">↓</span> Quick Weights</label>
-          <div style="display:flex;gap:6px;flex-wrap:wrap;">
-            <button onclick="setWeight(0.5)"  class="qw-btn">0.5kg</button>
-            <button onclick="setWeight(1)"    class="qw-btn">1 kg</button>
-            <button onclick="setWeight(3)"    class="qw-btn">3 kg</button>
-            <button onclick="setWeight(7)"    class="qw-btn">7 kg</button>
-            <button onclick="setWeight(15)"   class="qw-btn">15 kg</button>
-            <button onclick="setWeight(25)"   class="qw-btn">25 kg</button>
-          </div>
-        </div>
+<div class="result" id="output"></div>
 
-        <!-- 3. SHIPMENT TYPE -->
-        <div class="form-group">
-          <label class="field-label"><span class="lnum">3</span> Shipment Type</label>
-          <div class="toggle-group" id="typeGroup">
-            <button class="toggle-btn active" onclick="selectType(this,'document')" data-value="document">
-              <span class="toggle-icon">📄</span>Document<br><span style="font-size:0.5rem;color:inherit;opacity:0.7;">+₹0</span>
-            </button>
-            <button class="toggle-btn" onclick="selectType(this,'parcel')" data-value="parcel">
-              <span class="toggle-icon">📦</span>Parcel<br><span style="font-size:0.5rem;color:inherit;opacity:0.7;">+₹300</span>
-            </button>
-            <button class="toggle-btn" onclick="selectType(this,'commercial')" data-value="commercial">
-              <span class="toggle-icon">🏭</span>Commercial<br><span style="font-size:0.5rem;color:inherit;opacity:0.7;">+₹600</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- 4. DELIVERY SPEED -->
-        <div class="form-group">
-          <label class="field-label"><span class="lnum">4</span> Delivery Speed</label>
-          <div class="toggle-group" id="speedGroup">
-            <button class="toggle-btn active" onclick="selectSpeed(this,'standard')" data-value="standard">
-              <span class="toggle-icon">🚢</span>Standard<br><span style="font-size:0.5rem;color:inherit;opacity:0.7;">+₹0</span>
-            </button>
-            <button class="toggle-btn" onclick="selectSpeed(this,'express')" data-value="express">
-              <span class="toggle-icon">✈️</span>Express<br><span style="font-size:0.5rem;color:inherit;opacity:0.7;">+₹1,200</span>
-            </button>
-          </div>
-        </div>
-
-      </div><!-- /form-grid -->
-
-      <!-- CALCULATE BUTTON -->
-      <div class="calc-btn-wrap">
-        <button class="calc-btn" onclick="calculate()">
-          ⚡ CALCULATE SHIPPING RATE
-        </button>
-      </div>
-
-      <!-- RESULT PANEL -->
-      <div class="result-panel" id="resultPanel">
-
-        <div class="result-top">
-          <div class="result-label">Estimated International Shipping Cost</div>
-          <div class="result-amount" id="resultAmount">₹0</div>
-          <div class="result-usd" id="resultUSD"></div>
-        </div>
-
-        <!-- Tags -->
-        <div class="result-tags" id="resultTags"></div>
-
-        <!-- Breakdown -->
-        <div class="result-breakdown" id="resultBreakdown"></div>
-
-        <!-- Disclaimer -->
-        <div class="disclaimer">
-          ⚠️ Rates are indicative and may vary based on customs duties &amp; volumetric weight. Final invoice issued after physical weight verification.
-        </div>
-
-        <!-- CTA -->
-        <div class="result-cta">
-          <a href="tel:+919930824005" class="cta-btn cta-primary">📞 Book This Shipment</a>
-          <button class="cta-btn cta-secondary" onclick="resetCalc()">↺ Recalculate</button>
-        </div>
-
-      </div><!-- /result-panel -->
-
-    </div><!-- /calc-body -->
-  </div><!-- /calc-card -->
-
-  <!-- ZONE REFERENCE TABLE -->
-  <div class="zone-ref">
-    <table class="zone-table">
-      <thead>
-        <tr>
-          <th>Zone</th>
-          <th>Countries</th>
-          <th>Rate / KG</th>
-          <th>Transit Time</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><span class="zone-num z1">ZONE 1</span></td>
-          <td>UAE, Singapore, Malaysia, Thailand</td>
-          <td><span class="zrate z1">₹900/kg</span></td>
-          <td>2–4 Days</td>
-        </tr>
-        <tr>
-          <td><span class="zone-num z2">ZONE 2</span></td>
-          <td>UK, Germany, France, Italy, Netherlands</td>
-          <td><span class="zrate z2">₹1,400/kg</span></td>
-          <td>4–7 Days</td>
-        </tr>
-        <tr>
-          <td><span class="zone-num z3">ZONE 3</span></td>
-          <td>USA, Canada</td>
-          <td><span class="zrate z3">₹1,600/kg</span></td>
-          <td>5–8 Days</td>
-        </tr>
-        <tr>
-          <td><span class="zone-num z4">ZONE 4</span></td>
-          <td>Australia, New Zealand, Others</td>
-          <td><span class="zrate z4">₹1,800/kg</span></td>
-          <td>6–10 Days</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- FOOTER -->
-  <div class="calc-footer">
-    <p>NEXUS GLOBAL LOGISTIC SOLUTION</p>
-    <p>
-      <a href="tel:+919930824005">📞 +91 9930824005</a>
-      &nbsp;·&nbsp;
-      <a href="mailto:amit.sharma07735@gmail.com">✉️ amit.sharma07735@gmail.com</a>
-    </p>
-    <p style="margin-top:8px;color:#2a3a5a;">Base Handling: ₹750 &nbsp;·&nbsp; Fuel Surcharge: 12% &nbsp;·&nbsp; Express Add-on: ₹1,200</p>
-  </div>
-
-</div><!-- /wrapper -->
-
-<!-- Quick weight button style -->
-<style>
-  .qw-btn {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    font-family: 'Space Mono', monospace;
-    font-size: 0.55rem;
-    letter-spacing: 1px;
-    padding: 6px 10px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .qw-btn:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: rgba(0,212,255,0.06);
-  }
-  .qw-btn.active {
-    background: rgba(0,212,255,0.15);
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-</style>
+</div>
 
 <script>
-// ── CONFIG ──
-var ZONE_RATES    = { 1: 900, 2: 1400, 3: 1600, 4: 1800 };
-var ZONE_NAMES    = { 1:'Zone 1 — Asia/Gulf', 2:'Zone 2 — Europe', 3:'Zone 3 — North America', 4:'Zone 4 — Oceania/Others' };
-var ZONE_TRANSIT  = { 1:'2–4 Days', 2:'4–7 Days', 3:'5–8 Days', 4:'6–10 Days' };
-var BASE_HANDLING = 750;
-var FUEL_RATE     = 0.12;
-var TYPE_CHARGES  = { document: 0, parcel: 300, commercial: 600 };
-var EXPRESS_ADD   = 1200;
-var INR_TO_USD    = 83;
 
-var selectedType  = 'document';
-var selectedSpeed = 'standard';
+function calculate(){
 
-// ── ZONE INFO ──
-function updateZoneInfo() {
-  var sel = document.getElementById('destination').value;
-  var el  = document.getElementById('zoneInfo');
-  if (!sel) { el.classList.remove('show'); return; }
-  var zone    = parseInt(sel.split('|')[0]);
-  var country = sel.split('|')[1];
-  el.innerHTML = '<strong>' + ZONE_NAMES[zone] + '</strong> &nbsp;|&nbsp; Rate: <span class="zone-rate">₹' + ZONE_RATES[zone].toLocaleString('en-IN') + '/kg</span> &nbsp;|&nbsp; Transit: ' + ZONE_TRANSIT[zone];
-  el.classList.add('show');
+let zone = document.getElementById("country").value;
+let actualWeight = parseFloat(document.getElementById("weight").value);
+let L = parseFloat(document.getElementById("length").value);
+let W = parseFloat(document.getElementById("width").value);
+let H = parseFloat(document.getElementById("height").value);
+let service = document.getElementById("service").value;
+
+if(!actualWeight || !L || !W || !H){
+document.getElementById("output").innerHTML="⚠️ Please fill all fields";
+return;
 }
 
-// ── WEIGHT HINT ──
-function updateWeightHint() {
-  var wt = parseFloat(document.getElementById('weight').value);
-  var el = document.getElementById('weightHint');
-  if (!wt || wt <= 0) { el.classList.remove('show'); return; }
-  var disc = '';
-  if (wt >= 10)     disc = '18% weight discount applied';
-  else if (wt >= 5) disc = '10% weight discount applied';
-  else if (wt >= 2) disc = '5% weight discount applied';
-  else               disc = 'No weight discount (min 2kg for discount)';
-  el.innerHTML = '⚖️ ' + wt + ' kg — ' + disc;
-  el.classList.add('show');
+// ✅ VOLUMETRIC WEIGHT
+let volumetricWeight = (L * W * H) / 5000;
+
+// ✅ CHARGEABLE WEIGHT
+let chargeableWeight = Math.max(actualWeight, volumetricWeight);
+
+// Zone Pricing
+let baseRates = {
+zoneA: { express: 900, economy: 700 },
+zoneB: { express: 850, economy: 650 },
+zoneC: { express: 750, economy: 550 },
+zoneD: { express: 700, economy: 500 },
+zoneE: { express: 950, economy: 750 }
+};
+
+let perKg = baseRates[zone][service];
+
+// Charges
+let fuel = 1.18;
+let handling = 150;
+
+let total = (perKg * chargeableWeight) * fuel + handling;
+
+document.getElementById("output").innerHTML = `
+<b>Actual Weight:</b> ${actualWeight.toFixed(2)} Kg <br>
+<b>Volumetric Weight:</b> ${volumetricWeight.toFixed(2)} Kg <br>
+<b>Chargeable Weight:</b> ${chargeableWeight.toFixed(2)} Kg <br><br>
+<b>Rate:</b> ₹${perKg}/Kg <br>
+<b>Fuel:</b> 18% <br>
+<b>Handling:</b> ₹150 <br><br>
+<h3>Total: ₹${total.toFixed(2)}</h3>
+`;
+
 }
 
-// ── QUICK WEIGHT ──
-function setWeight(w) {
-  document.getElementById('weight').value = w;
-  document.querySelectorAll('.qw-btn').forEach(function(b){ b.classList.remove('active'); });
-  event.target.classList.add('active');
-  updateWeightHint();
-}
-
-// ── TYPE SELECT ──
-function selectType(btn, val) {
-  document.querySelectorAll('#typeGroup .toggle-btn').forEach(function(b){ b.classList.remove('active'); });
-  btn.classList.add('active');
-  selectedType = val;
-}
-
-// ── SPEED SELECT ──
-function selectSpeed(btn, val) {
-  document.querySelectorAll('#speedGroup .toggle-btn').forEach(function(b){
-    b.classList.remove('active');
-    b.classList.remove('active-orange');
-  });
-  if (val === 'express') btn.classList.add('active-orange');
-  else btn.classList.add('active');
-  selectedSpeed = val;
-}
-
-// ── MAIN CALCULATE ──
-function calculate() {
-  var destVal = document.getElementById('destination').value;
-  var wt      = parseFloat(document.getElementById('weight').value);
-
-  // Validation
-  if (!destVal) { alert('Please select a destination country.'); return; }
-  if (!wt || wt <= 0) { alert('Please enter a valid weight.'); return; }
-
-  var zone    = parseInt(destVal.split('|')[0]);
-  var country = destVal.split('|')[1];
-
-  // ── PRICING FORMULA ──
-  var zoneRate      = ZONE_RATES[zone];
-  var weightCost    = wt * zoneRate;
-  var typeCost      = TYPE_CHARGES[selectedType];
-  var expressCost   = (selectedSpeed === 'express') ? EXPRESS_ADD : 0;
-
-  var subtotal = BASE_HANDLING + weightCost + typeCost + expressCost;
-
-  // Weight discount
-  var discPct = 0;
-  if (wt >= 10)     discPct = 18;
-  else if (wt >= 5) discPct = 10;
-  else if (wt >= 2) discPct = 5;
-
-  var discAmount = Math.round(subtotal * discPct / 100);
-  var afterDisc  = subtotal - discAmount;
-
-  // Fuel surcharge
-  var fuelCharge = Math.round(afterDisc * FUEL_RATE);
-  var grandTotal = afterDisc + fuelCharge;
-  var usdTotal   = (grandTotal / INR_TO_USD).toFixed(2);
-
-  // ── DISPLAY ──
-  document.getElementById('resultAmount').textContent = '₹' + grandTotal.toLocaleString('en-IN');
-  document.getElementById('resultUSD').textContent = '≈ $' + usdTotal + ' USD  (1 USD = ₹' + INR_TO_USD + ')';
-
-  // Tags
-  var typeLabels = { document:'Document 📄', parcel:'Parcel 📦', commercial:'Commercial 🏭' };
-  document.getElementById('resultTags').innerHTML =
-    '<span class="rtag zone">Zone ' + zone + ' — ' + country + '</span>' +
-    '<span class="rtag type">' + typeLabels[selectedType] + '</span>' +
-    '<span class="rtag speed">' + (selectedSpeed==='express' ? '✈️ Express' : '🚢 Standard') + '</span>' +
-    '<span class="rtag zone">' + wt + ' kg</span>';
-
-  // Breakdown
-  var rows = [
-    { label:'Base Handling Fee', val:'₹' + BASE_HANDLING.toLocaleString('en-IN'), cls:'' },
-    { label:'Weight Cost (' + wt + 'kg × ₹' + zoneRate.toLocaleString('en-IN') + ')', val:'₹' + weightCost.toLocaleString('en-IN'), cls:'' },
-    { label:'Shipment Type (' + selectedType + ')', val: typeCost > 0 ? '₹' + typeCost.toLocaleString('en-IN') : '₹0', cls:'' },
-    { label:'Express Delivery', val: expressCost > 0 ? '₹' + expressCost.toLocaleString('en-IN') : 'Not Selected', cls:'' },
-    { label:'Subtotal', val:'₹' + subtotal.toLocaleString('en-IN'), cls:'cyan' },
-    { label:'Weight Discount (' + discPct + '%)', val: discAmount > 0 ? '−₹' + discAmount.toLocaleString('en-IN') : 'None', cls:'green' },
-    { label:'Fuel Surcharge (12%)', val:'₹' + fuelCharge.toLocaleString('en-IN'), cls:'orange' },
-  ];
-
-  var html = rows.map(function(r){
-    return '<div class="breakdown-item">' +
-      '<span>' + r.label + '</span>' +
-      '<span class="bval ' + r.cls + '">' + r.val + '</span>' +
-      '</div>';
-  }).join('');
-
-  html += '<div class="breakdown-item total-row">' +
-    '<span>GRAND TOTAL</span>' +
-    '<span class="bval cyan">₹' + grandTotal.toLocaleString('en-IN') + '</span>' +
-    '</div>';
-
-  document.getElementById('resultBreakdown').innerHTML = html;
-
-  // Show panel
-  var panel = document.getElementById('resultPanel');
-  panel.classList.add('show');
-  setTimeout(function(){
-    panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
-  }, 100);
-}
-
-// ── RESET ──
-function resetCalc() {
-  document.getElementById('destination').value = '';
-  document.getElementById('weight').value = '';
-  document.getElementById('zoneInfo').classList.remove('show');
-  document.getElementById('weightHint').classList.remove('show');
-  document.getElementById('resultPanel').classList.remove('show');
-  document.querySelectorAll('.qw-btn').forEach(function(b){ b.classList.remove('active'); });
-
-  // Reset type to document
-  document.querySelectorAll('#typeGroup .toggle-btn').forEach(function(b){ b.classList.remove('active'); });
-  document.querySelector('#typeGroup .toggle-btn[data-value="document"]').classList.add('active');
-  selectedType = 'document';
-
-  // Reset speed to standard
-  document.querySelectorAll('#speedGroup .toggle-btn').forEach(function(b){
-    b.classList.remove('active');
-    b.classList.remove('active-orange');
-  });
-  document.querySelector('#speedGroup .toggle-btn[data-value="standard"]').classList.add('active');
-  selectedSpeed = 'standard';
-
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
 </script>
 
 </body>
