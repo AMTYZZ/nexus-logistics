@@ -432,6 +432,372 @@
     .form-row { grid-template-columns:1fr; }
     .rates-hero { flex-direction:column; gap:20px; }
   }
+
+  /* ===== LOGIN SYSTEM ===== */
+  .login-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
+    z-index: 100000;
+    align-items: center;
+    justify-content: center;
+  }
+  .login-overlay.show { display: flex; }
+
+  .login-box {
+    background: #0d1428;
+    border: 1px solid rgba(0,212,255,0.3);
+    width: 420px;
+    max-width: 95vw;
+    position: relative;
+    box-shadow: 0 0 60px rgba(0,212,255,0.15);
+    animation: fadeUp 0.4s ease;
+  }
+  .login-header {
+    padding: 30px 36px 20px;
+    border-bottom: 1px solid rgba(0,212,255,0.1);
+  }
+  .login-logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem;
+    font-weight: 900;
+    color: #00d4ff;
+    letter-spacing: 3px;
+    margin-bottom: 6px;
+  }
+  .login-logo span { color: #ff6b35; }
+  .login-subtitle {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 3px;
+    color: #5a6a8a;
+    text-transform: uppercase;
+  }
+  .login-tabs {
+    display: flex;
+    border-bottom: 1px solid rgba(0,212,255,0.1);
+  }
+  .login-tab {
+    flex: 1;
+    padding: 14px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-align: center;
+    color: #5a6a8a;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-bottom: 2px solid transparent;
+  }
+  .login-tab.active { color: #00d4ff; border-bottom-color: #00d4ff; background: rgba(0,212,255,0.04); }
+  .login-tab:hover { color: #00d4ff; }
+
+  .login-body { padding: 30px 36px; }
+
+  .login-field { margin-bottom: 18px; }
+  .login-label {
+    display: block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #5a6a8a;
+    margin-bottom: 8px;
+  }
+  .login-input {
+    width: 100%;
+    background: #080d1a;
+    border: 1px solid rgba(0,212,255,0.15);
+    padding: 13px 16px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    color: #e8edf5;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .login-input:focus { border-color: #00d4ff; }
+  .login-input::placeholder { color: #3a4a6a; }
+
+  .login-btn {
+    width: 100%;
+    background: #00d4ff;
+    color: #050810;
+    border: none;
+    padding: 15px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: box-shadow 0.3s;
+  }
+  .login-btn:hover { box-shadow: 0 0 24px rgba(0,212,255,0.5); }
+  .login-btn.admin-btn { background: #ff6b35; }
+  .login-btn.admin-btn:hover { box-shadow: 0 0 24px rgba(255,107,53,0.5); }
+
+  .login-error {
+    background: rgba(255,50,50,0.1);
+    border: 1px solid rgba(255,50,50,0.3);
+    color: #ff6b6b;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    display: none;
+  }
+  .login-error.show { display: block; }
+
+  .login-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: none;
+    border: none;
+    color: #5a6a8a;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color 0.3s;
+    line-height: 1;
+  }
+  .login-close:hover { color: #ff6b35; }
+
+  .login-hint {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 2px;
+    color: #3a4a6a;
+    text-align: center;
+    margin-top: 14px;
+    line-height: 1.8;
+  }
+
+  /* ===== CUSTOMER DASHBOARD ===== */
+  .dashboard-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #050810;
+    z-index: 99999;
+    overflow-y: auto;
+  }
+  .dashboard-overlay.show { display: block; }
+
+  .dash-nav {
+    background: #080d1a;
+    border-bottom: 1px solid rgba(0,212,255,0.15);
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .dash-logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.9rem;
+    font-weight: 900;
+    color: #00d4ff;
+    letter-spacing: 3px;
+  }
+  .dash-logo span { color: #ff6b35; }
+  .dash-user {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .dash-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: 'Orbitron', monospace;
+  }
+  .dash-avatar.customer { background: rgba(0,212,255,0.2); color: #00d4ff; border: 1px solid rgba(0,212,255,0.3); }
+  .dash-avatar.admin { background: rgba(255,107,53,0.2); color: #ff6b35; border: 1px solid rgba(255,107,53,0.3); }
+  .dash-username {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    color: #e8edf5;
+  }
+  .dash-role {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 2px;
+    color: #5a6a8a;
+    text-transform: uppercase;
+  }
+  .dash-logout {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    padding: 8px 18px;
+    border: 1px solid rgba(255,107,53,0.4);
+    color: #ff6b35;
+    background: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s;
+  }
+  .dash-logout:hover { background: rgba(255,107,53,0.1); }
+
+  .dash-body { max-width: 1100px; margin: 0 auto; padding: 40px 30px; }
+
+  .dash-welcome {
+    margin-bottom: 36px;
+  }
+  .dash-welcome h2 {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .dash-welcome p { color: #5a6a8a; font-size: 1rem; }
+
+  .dash-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    background: rgba(0,212,255,0.1);
+    margin-bottom: 36px;
+  }
+  .dash-stat {
+    background: #0d1428;
+    padding: 24px 26px;
+  }
+  .dash-stat-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #00d4ff;
+    margin-bottom: 4px;
+  }
+  .dash-stat-num.orange { color: #ff6b35; }
+  .dash-stat-num.green { color: #39ff14; }
+  .dash-stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #5a6a8a;
+  }
+
+  .dash-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; }
+  .dash-card {
+    background: #0d1428;
+    border: 1px solid rgba(0,212,255,0.1);
+    padding: 26px;
+  }
+  .dash-card-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    color: #00d4ff;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .dash-card-title::before { content: '//'; color: #ff6b35; }
+
+  .shipment-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0,212,255,0.06);
+    font-size: 0.9rem;
+  }
+  .shipment-row:last-child { border-bottom: none; }
+  .shipment-id { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: #00d4ff; }
+  .shipment-dest { color: #5a6a8a; font-size: 0.85rem; }
+  .status-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 2px;
+    padding: 4px 10px;
+    text-transform: uppercase;
+  }
+  .status-transit { background: rgba(255,200,0,0.1); color: #ffc800; border: 1px solid rgba(255,200,0,0.3); }
+  .status-delivered { background: rgba(57,255,20,0.1); color: #39ff14; border: 1px solid rgba(57,255,20,0.3); }
+  .status-processing { background: rgba(0,212,255,0.1); color: #00d4ff; border: 1px solid rgba(0,212,255,0.3); }
+
+  .notif-row {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0,212,255,0.06);
+    align-items: flex-start;
+  }
+  .notif-row:last-child { border-bottom: none; }
+  .notif-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+  .notif-dot.cyan { background: #00d4ff; box-shadow: 0 0 6px #00d4ff; }
+  .notif-dot.orange { background: #ff6b35; box-shadow: 0 0 6px #ff6b35; }
+  .notif-dot.green { background: #39ff14; box-shadow: 0 0 6px #39ff14; }
+  .notif-text { font-size: 0.88rem; color: #a0aabf; line-height: 1.5; }
+  .notif-time { font-family: 'Space Mono', monospace; font-size: 0.55rem; color: #3a4a6a; margin-top: 3px; }
+
+  /* ADMIN EXTRA */
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  .admin-table th {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #ff6b35;
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,107,53,0.2);
+    background: rgba(255,107,53,0.04);
+  }
+  .admin-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(0,212,255,0.05);
+    color: #a0aabf;
+  }
+  .admin-table tr:hover td { background: rgba(0,212,255,0.03); }
+
+  .admin-action {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 2px;
+    padding: 5px 12px;
+    border: 1px solid rgba(0,212,255,0.3);
+    color: #00d4ff;
+    background: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    margin-right: 4px;
+  }
+  .admin-action:hover { background: rgba(0,212,255,0.1); }
+  .admin-action.del { border-color: rgba(255,107,53,0.3); color: #ff6b35; }
+  .admin-action.del:hover { background: rgba(255,107,53,0.1); }
+
+  .dash-full { grid-column: 1 / -1; }
+
+  @media(max-width:768px) {
+    .dash-stats { grid-template-columns: 1fr 1fr; }
+    .dash-grid { grid-template-columns: 1fr; }
+    .dash-nav { padding: 14px 16px; }
+    .dash-body { padding: 24px 14px; }
+  }
+
 </style>
 </head>
 <body>
@@ -613,7 +979,10 @@
     <li><a href="#" onclick="showPage('quote')">Get Quote</a></li>
     <li><a href="#" onclick="showPage('contact')">Contact</a></li>
   </ul>
-  <a href="#" class="nav-cta" onclick="showPage('quote')"><span>Free Quote</span></a>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <button onclick="openLogin('customer')" style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:2px;padding:9px 18px;background:transparent;border:1px solid rgba(0,212,255,0.4);color:#00d4ff;cursor:pointer;text-transform:uppercase;transition:all 0.3s;" onmouseover="this.style.background='rgba(0,212,255,0.1)'" onmouseout="this.style.background='transparent'">Login</button>
+    <a href="#" class="nav-cta" onclick="showPage('quote')"><span>Free Quote</span></a>
+  </div>
 </nav>
 
 <!-- HOME -->
@@ -942,6 +1311,332 @@
   </div>
 </footer>
 
+<!-- ===== LOGIN MODAL ===== -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box">
+    <button class="login-close" onclick="closeLogin()">✕</button>
+    <div class="login-header">
+      <div class="login-logo">NEXUS<span>.</span>GLOBAL</div>
+      <div class="login-subtitle">Logistic Solution — Secure Portal</div>
+    </div>
+    <div class="login-tabs">
+      <button class="login-tab active" id="tabCustomer" onclick="switchTab('customer')">👤 Customer</button>
+      <button class="login-tab" id="tabAdmin" onclick="switchTab('admin')">🔐 Admin</button>
+    </div>
+    <div class="login-body">
+      <div class="login-error" id="loginError">❌ Invalid username or password. Please try again.</div>
+
+      <div class="login-field">
+        <label class="login-label">Username / Email</label>
+        <input type="text" class="login-input" id="loginUser" placeholder="Enter your username" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div class="login-field">
+        <label class="login-label">Password</label>
+        <input type="password" class="login-input" id="loginPass" placeholder="Enter your password" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+
+      <button class="login-btn" id="loginBtn" onclick="doLogin()">LOGIN →</button>
+
+      <div class="login-hint" id="loginHint">
+        CUSTOMER DEMO: user / customer123<br>
+        ─────────────────────────────
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CUSTOMER DASHBOARD ===== -->
+<div class="dashboard-overlay" id="customerDash">
+  <div class="dash-nav">
+    <div class="dash-logo">NEXUS<span>.</span>GLOBAL <span style="font-size:0.5rem;color:#5a6a8a;letter-spacing:4px;margin-left:10px;font-family:'Space Mono',monospace;">CUSTOMER PORTAL</span></div>
+    <div class="dash-user">
+      <div>
+        <div class="dash-username" id="custName">John Smith</div>
+        <div class="dash-role">Customer Account</div>
+      </div>
+      <div class="dash-avatar customer" id="custAvatar">J</div>
+      <button class="dash-logout" onclick="doLogout()">Logout</button>
+    </div>
+  </div>
+  <div class="dash-body">
+    <div class="dash-welcome">
+      <h2>Welcome back, <span style="color:#00d4ff;" id="custWelcome">John</span> 👋</h2>
+      <p>Here's your shipment overview and latest updates from Nexus Global Logistic Solution.</p>
+    </div>
+
+    <div class="dash-stats">
+      <div class="dash-stat">
+        <div class="dash-stat-num">7</div>
+        <div class="dash-stat-label">Active Shipments</div>
+      </div>
+      <div class="dash-stat">
+        <div class="dash-stat-num orange">2</div>
+        <div class="dash-stat-label">In Transit</div>
+      </div>
+      <div class="dash-stat">
+        <div class="dash-stat-num green">12</div>
+        <div class="dash-stat-label">Delivered</div>
+      </div>
+      <div class="dash-stat">
+        <div class="dash-stat-num">₹4.2L</div>
+        <div class="dash-stat-label">Total Shipped Value</div>
+      </div>
+    </div>
+
+    <div class="dash-grid">
+      <!-- Shipments -->
+      <div class="dash-card">
+        <div class="dash-card-title">My Shipments</div>
+        <div class="shipment-row">
+          <div>
+            <div class="shipment-id">NXG-2024-00184</div>
+            <div class="shipment-dest">India → Germany · Air Freight</div>
+          </div>
+          <span class="status-badge status-transit">In Transit</span>
+        </div>
+        <div class="shipment-row">
+          <div>
+            <div class="shipment-id">NXG-2024-00176</div>
+            <div class="shipment-dest">India → UAE · Express</div>
+          </div>
+          <span class="status-badge status-delivered">Delivered</span>
+        </div>
+        <div class="shipment-row">
+          <div>
+            <div class="shipment-id">NXG-2024-00165</div>
+            <div class="shipment-dest">India → USA · Ocean FCL</div>
+          </div>
+          <span class="status-badge status-transit">In Transit</span>
+        </div>
+        <div class="shipment-row">
+          <div>
+            <div class="shipment-id">NXG-2024-00158</div>
+            <div class="shipment-dest">India → UK · Air Freight</div>
+          </div>
+          <span class="status-badge status-delivered">Delivered</span>
+        </div>
+        <div class="shipment-row">
+          <div>
+            <div class="shipment-id">NXG-2024-00142</div>
+            <div class="shipment-dest">India → Australia · Ocean LCL</div>
+          </div>
+          <span class="status-badge status-processing">Processing</span>
+        </div>
+      </div>
+
+      <!-- Notifications -->
+      <div class="dash-card">
+        <div class="dash-card-title">Live Notifications</div>
+        <div class="notif-row">
+          <div class="notif-dot cyan"></div>
+          <div>
+            <div class="notif-text">NXG-2024-00184 arrived at Frankfurt hub. ETA delivery: Tomorrow 10AM</div>
+            <div class="notif-time">2 hours ago</div>
+          </div>
+        </div>
+        <div class="notif-row">
+          <div class="notif-dot green"></div>
+          <div>
+            <div class="notif-text">NXG-2024-00176 successfully delivered to Dubai recipient ✓</div>
+            <div class="notif-time">Yesterday</div>
+          </div>
+        </div>
+        <div class="notif-row">
+          <div class="notif-dot orange"></div>
+          <div>
+            <div class="notif-text">NXG-2024-00165 customs clearance completed at Los Angeles port</div>
+            <div class="notif-time">2 days ago</div>
+          </div>
+        </div>
+        <div class="notif-row">
+          <div class="notif-dot cyan"></div>
+          <div>
+            <div class="notif-text">Invoice #INV-2024-0089 generated. Amount: ₹1,24,500</div>
+            <div class="notif-time">3 days ago</div>
+          </div>
+        </div>
+        <div style="margin-top:20px;padding:14px;background:#080d1a;border:1px solid rgba(0,212,255,0.1);">
+          <div style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:2px;color:#5a6a8a;margin-bottom:8px;">NEED HELP?</div>
+          <div style="font-size:0.9rem;color:#a0aabf;">📞 +91 9930824005</div>
+          <div style="font-size:0.85rem;color:#5a6a8a;">amit.sharma07735@gmail.com</div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="dash-card dash-full" style="display:flex;gap:12px;flex-wrap:wrap;padding:20px 26px;">
+        <button onclick="closeLogin();showPage('tracking')" style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:2px;padding:12px 22px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);color:#00d4ff;cursor:pointer;text-transform:uppercase;transition:all 0.3s;">🔍 Track Shipment</button>
+        <button onclick="closeLogin();showPage('quote')" style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:2px;padding:12px 22px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);color:#00d4ff;cursor:pointer;text-transform:uppercase;transition:all 0.3s;">💰 Get New Quote</button>
+        <button onclick="closeLogin();showPage('contact')" style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:2px;padding:12px 22px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);color:#00d4ff;cursor:pointer;text-transform:uppercase;transition:all 0.3s;">📞 Contact Support</button>
+        <button style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:2px;padding:12px 22px;background:rgba(57,255,20,0.08);border:1px solid rgba(57,255,20,0.2);color:#39ff14;cursor:pointer;text-transform:uppercase;">📄 Download Invoice</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN DASHBOARD ===== -->
+<div class="dashboard-overlay" id="adminDash">
+  <div class="dash-nav">
+    <div class="dash-logo">NEXUS<span>.</span>GLOBAL <span style="font-size:0.5rem;color:#ff6b35;letter-spacing:4px;margin-left:10px;font-family:'Space Mono',monospace;">ADMIN PANEL</span></div>
+    <div class="dash-user">
+      <div>
+        <div class="dash-username">Amit Sharma</div>
+        <div class="dash-role" style="color:#ff6b35;">Super Admin</div>
+      </div>
+      <div class="dash-avatar admin">A</div>
+      <button class="dash-logout" onclick="doLogout()">Logout</button>
+    </div>
+  </div>
+  <div class="dash-body">
+    <div class="dash-welcome">
+      <h2>Admin Control Panel <span style="color:#ff6b35;">🔐</span></h2>
+      <p>Manage all shipments, customers, rates and operations for Nexus Global Logistic Solution.</p>
+    </div>
+
+    <div class="dash-stats">
+      <div class="dash-stat">
+        <div class="dash-stat-num orange">2,847</div>
+        <div class="dash-stat-label">Total Shipments</div>
+      </div>
+      <div class="dash-stat">
+        <div class="dash-stat-num">486</div>
+        <div class="dash-stat-label">Active Customers</div>
+      </div>
+      <div class="dash-stat">
+        <div class="dash-stat-num green">₹84L</div>
+        <div class="dash-stat-label">Monthly Revenue</div>
+      </div>
+      <div class="dash-stat">
+        <div class="dash-stat-num">99.7%</div>
+        <div class="dash-stat-label">On-Time Rate</div>
+      </div>
+    </div>
+
+    <div class="dash-grid">
+      <!-- All Shipments Table -->
+      <div class="dash-card dash-full">
+        <div class="dash-card-title" style="color:#ff6b35;">All Active Shipments</div>
+        <div style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Tracking ID</th>
+                <th>Customer</th>
+                <th>Route</th>
+                <th>Service</th>
+                <th>Weight</th>
+                <th>Value (₹)</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="color:#00d4ff;font-family:'Space Mono',monospace;font-size:0.7rem;">NXG-2024-00184</td>
+                <td>John Smith</td>
+                <td>India → Germany</td>
+                <td>Air Freight</td>
+                <td>120 kg</td>
+                <td>₹2,98,000</td>
+                <td><span class="status-badge status-transit">In Transit</span></td>
+                <td><button class="admin-action">Edit</button><button class="admin-action del">Delete</button></td>
+              </tr>
+              <tr>
+                <td style="color:#00d4ff;font-family:'Space Mono',monospace;font-size:0.7rem;">NXG-2024-00183</td>
+                <td>Priya Mehta</td>
+                <td>India → UAE</td>
+                <td>Express</td>
+                <td>45 kg</td>
+                <td>₹1,12,000</td>
+                <td><span class="status-badge status-processing">Processing</span></td>
+                <td><button class="admin-action">Edit</button><button class="admin-action del">Delete</button></td>
+              </tr>
+              <tr>
+                <td style="color:#00d4ff;font-family:'Space Mono',monospace;font-size:0.7rem;">NXG-2024-00182</td>
+                <td>Ahmed Al Rashid</td>
+                <td>UAE → USA</td>
+                <td>Ocean FCL</td>
+                <td>2,400 kg</td>
+                <td>₹8,40,000</td>
+                <td><span class="status-badge status-transit">In Transit</span></td>
+                <td><button class="admin-action">Edit</button><button class="admin-action del">Delete</button></td>
+              </tr>
+              <tr>
+                <td style="color:#00d4ff;font-family:'Space Mono',monospace;font-size:0.7rem;">NXG-2024-00181</td>
+                <td>Li Wei Corp</td>
+                <td>China → UK</td>
+                <td>Air Freight</td>
+                <td>380 kg</td>
+                <td>₹9,45,000</td>
+                <td><span class="status-badge status-delivered">Delivered</span></td>
+                <td><button class="admin-action">Edit</button><button class="admin-action del">Delete</button></td>
+              </tr>
+              <tr>
+                <td style="color:#00d4ff;font-family:'Space Mono',monospace;font-size:0.7rem;">NXG-2024-00180</td>
+                <td>Sarah Johnson</td>
+                <td>Germany → India</td>
+                <td>Road Freight</td>
+                <td>750 kg</td>
+                <td>₹3,20,000</td>
+                <td><span class="status-badge status-processing">Processing</span></td>
+                <td><button class="admin-action">Edit</button><button class="admin-action del">Delete</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Customers -->
+      <div class="dash-card">
+        <div class="dash-card-title" style="color:#ff6b35;">Recent Customers</div>
+        <table class="admin-table">
+          <thead><tr><th>Name</th><th>Country</th><th>Shipments</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td>John Smith</td><td>🇬🇧 UK</td><td>12</td><td><button class="admin-action">View</button></td></tr>
+            <tr><td>Priya Mehta</td><td>🇮🇳 India</td><td>8</td><td><button class="admin-action">View</button></td></tr>
+            <tr><td>Ahmed Al Rashid</td><td>🇦🇪 UAE</td><td>24</td><td><button class="admin-action">View</button></td></tr>
+            <tr><td>Li Wei Corp</td><td>🇨🇳 China</td><td>31</td><td><button class="admin-action">View</button></td></tr>
+            <tr><td>Sarah Johnson</td><td>🇩🇪 Germany</td><td>6</td><td><button class="admin-action">View</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Notifications -->
+      <div class="dash-card">
+        <div class="dash-card-title" style="color:#ff6b35;">System Alerts</div>
+        <div class="notif-row">
+          <div class="notif-dot orange"></div>
+          <div>
+            <div class="notif-text">3 shipments pending customs clearance at Mumbai port</div>
+            <div class="notif-time">1 hour ago</div>
+          </div>
+        </div>
+        <div class="notif-row">
+          <div class="notif-dot cyan"></div>
+          <div>
+            <div class="notif-text">New customer registration: Sarah Johnson from Germany</div>
+            <div class="notif-time">3 hours ago</div>
+          </div>
+        </div>
+        <div class="notif-row">
+          <div class="notif-dot green"></div>
+          <div>
+            <div class="notif-text">Monthly revenue target ₹80L achieved ✓</div>
+            <div class="notif-time">Today</div>
+          </div>
+        </div>
+        <div class="notif-row">
+          <div class="notif-dot orange"></div>
+          <div>
+            <div class="notif-text">Flight delay warning: NXG-2024-00184 ETA pushed by 4 hours</div>
+            <div class="notif-time">5 hours ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <!-- AI CHAT -->
 <div class="chat-widget">
   <div class="chat-panel" id="chatPanel">
@@ -957,72 +1652,213 @@
   <button class="chat-btn" onclick="toggleChat()">🤖</button>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  
-  document.addEventListener('mouseleave', () => { cur.style.opacity='0'; ring.style.opacity='0'; });
-  document.addEventListener('mouseenter', () => { cur.style.opacity='1'; ring.style.opacity='1'; });
 
-  // Navigation
-  function showPage(id) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    window.scrollTo(0, 0);
+
+<script>
+// ============ NAVIGATION ============
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ============ TRACKING ============
+function doTrack() {
+  var v = document.getElementById('trackInput').value.trim();
+  if (!v) { showNotif('Please enter a tracking number'); return; }
+  var r = document.getElementById('trackResult');
+  r.style.display = 'none';
+  setTimeout(function(){ r.style.display = 'block'; }, 400);
+  showNotif('Shipment found! Showing live status below.');
+}
+
+// ============ QUOTE CALCULATOR ============
+var INR = 83;
+var svcRates = {
+  express: {b:30, t:'1-3 Days'},
+  air:     {b:30, t:'3-7 Days'},
+  ocean:   {b:5,  t:'18-35 Days'},
+  road:    {b:12, t:'5-14 Days'}
+};
+var routeMult = {
+  'in-us':1.4,'in-de':1.3,'in-uk':1.3,'in-ae':0.9,'in-au':1.2,
+  'in-cn':1.0,'in-br':1.5,'in-za':1.4,'in-ng':1.5,'in-jp':1.1,
+  'in-sa':0.9,'in-ca':1.4,'in-fr':1.3,'cn-us':1.4,'cn-de':1.2,
+  'us-de':1.1,'ae-us':1.3,'de-us':1.1
+};
+var cargoMult = {general:1,hazmat:1.9,perishable:1.6,valuable:1.7,oversized:1.8};
+
+function calcQ() {
+  var s    = document.getElementById('qSvc').value;
+  var wt   = parseFloat(document.getElementById('qWt').value) || 50;
+  var vol  = parseFloat(document.getElementById('qVol').value) || 0.5;
+  var cg   = document.getElementById('qCargo').value;
+  var orig = document.getElementById('qOrig').value;
+  var dest = document.getElementById('qDest').value;
+  var r    = svcRates[s];
+  var rm   = routeMult[orig+'-'+dest] || 1.2;
+  var cm   = cargoMult[cg];
+  var chargeable = Math.max(wt, vol*167);
+  var freight = Math.round(chargeable * r.b * rm * cm);
+  var fuel    = Math.round(freight * 0.15);
+  var cust    = Math.round(freight * 0.12);
+  var ins     = Math.round(freight * 0.05);
+  var total   = freight + fuel + cust + ins;
+  function fmt(usd) {
+    return '₹' + (usd*INR).toLocaleString('en-IN') + ' <span style="color:#5a6a8a;font-size:0.7rem;">($' + usd.toLocaleString() + ')</span>';
   }
+  document.getElementById('qTotal').innerHTML = '₹' + (total*INR).toLocaleString('en-IN') + '<br><span style="font-size:0.9rem;color:#5a6a8a;">$' + total.toLocaleString() + '</span>';
+  document.getElementById('bFreight').innerHTML = fmt(freight);
+  document.getElementById('bFuel').innerHTML    = fmt(fuel);
+  document.getElementById('bCust').innerHTML    = fmt(cust);
+  document.getElementById('bIns').innerHTML     = fmt(ins);
+  document.getElementById('bTime').textContent  = r.t;
+}
 
-  // Tracking
-  function doTrack() {
-    const v = document.getElementById('trackInput').value.trim();
-    if (!v) { showNotif('Please enter a tracking number'); return; }
-    const r = document.getElementById('trackResult');
-    r.style.display = 'none';
-    setTimeout(() => { r.style.display = 'block'; }, 400);
-    showNotif('Shipment found! Showing live status below.');
+// ============ NOTIFICATION ============
+function showNotif(msg) {
+  var n = document.getElementById('notif');
+  n.textContent = msg;
+  n.classList.add('show');
+  setTimeout(function(){ n.classList.remove('show'); }, 4000);
+}
+
+// ============ AI CHAT ============
+function toggleChat() {
+  document.getElementById('chatPanel').classList.toggle('open');
+}
+
+var chatReplies = {
+  rate:    'Our rates start from ₹2,490/kg ($30) worldwide. Call +91 9930824005 for exact quote!',
+  track:   'Go to our Tracking page and enter your Nexus tracking number. Need help? Call +91 9930824005.',
+  country: 'We deliver to 195+ countries worldwide. Every continent, every destination!',
+  contact: 'Call: +91 9930824005 (24/7) | Email: amit.sharma07735@gmail.com',
+  service: 'We offer Air Freight, Ocean Freight, Road Freight, Express, Warehousing, Customs Brokerage.',
+  time:    'Express 1-3 days, Air 3-7 days, Ocean 18-35 days, Road 5-14 days.',
+  def:     'For help call +91 9930824005 or email amit.sharma07735@gmail.com — available 24/7!'
+};
+
+function sendChat() {
+  var inp  = document.getElementById('chatIn');
+  var msgs = document.getElementById('chatMsgs');
+  if (!inp.value.trim()) return;
+  var um = document.createElement('div');
+  um.className = 'cmsg user';
+  um.textContent = inp.value;
+  msgs.appendChild(um);
+  var v = inp.value.toLowerCase();
+  inp.value = '';
+  setTimeout(function(){
+    var bm = document.createElement('div');
+    bm.className = 'cmsg bot';
+    var rep = chatReplies.def;
+    if (v.indexOf('rate')>-1||v.indexOf('price')>-1||v.indexOf('cost')>-1) rep = chatReplies.rate;
+    else if (v.indexOf('track')>-1)   rep = chatReplies.track;
+    else if (v.indexOf('country')>-1||v.indexOf('where')>-1) rep = chatReplies.country;
+    else if (v.indexOf('contact')>-1||v.indexOf('phone')>-1||v.indexOf('call')>-1) rep = chatReplies.contact;
+    else if (v.indexOf('service')>-1||v.indexOf('freight')>-1) rep = chatReplies.service;
+    else if (v.indexOf('time')>-1||v.indexOf('day')>-1||v.indexOf('fast')>-1) rep = chatReplies.time;
+    bm.textContent = rep;
+    msgs.appendChild(bm);
+    msgs.scrollTop = msgs.scrollHeight;
+  }, 600);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// ============ LOGIN SYSTEM ============
+var currentTab = 'customer';
+var USERS = {
+  customer: [
+    {user:'user',       pass:'customer123', name:'John Smith'},
+    {user:'customer',   pass:'customer123', name:'John Smith'},
+    {user:'priya',      pass:'priya123',    name:'Priya Mehta'},
+    {user:'ahmed',      pass:'ahmed123',    name:'Ahmed Al Rashid'}
+  ],
+  admin: [
+    {user:'admin',      pass:'admin123',    name:'Amit Sharma'},
+    {user:'amit',       pass:'admin123',    name:'Amit Sharma'},
+    {user:'superadmin', pass:'nexus@admin', name:'Amit Sharma'}
+  ]
+};
+
+function openLogin(tab) {
+  document.getElementById('loginOverlay').classList.add('show');
+  switchTab(tab || 'customer');
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+  document.getElementById('loginError').classList.remove('show');
+  setTimeout(function(){ document.getElementById('loginUser').focus(); }, 200);
+}
+
+function closeLogin() {
+  document.getElementById('loginOverlay').classList.remove('show');
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tabCustomer').classList.toggle('active', tab==='customer');
+  document.getElementById('tabAdmin').classList.toggle('active', tab==='admin');
+  var btn = document.getElementById('loginBtn');
+  if (tab === 'admin') {
+    btn.textContent = 'ADMIN LOGIN';
+    btn.classList.add('admin-btn');
+    document.getElementById('loginHint').innerHTML = 'ADMIN LOGIN: admin / admin123';
+  } else {
+    btn.textContent = 'LOGIN';
+    btn.classList.remove('admin-btn');
+    document.getElementById('loginHint').innerHTML = 'CUSTOMER LOGIN: user / customer123';
   }
+  document.getElementById('loginError').classList.remove('show');
+}
 
-  // Quote Calculator — base $30/kg
-  const svcRates = { express:{b:30,t:'1–3 Days'}, air:{b:30,t:'3–7 Days'}, ocean:{b:5,t:'18–35 Days'}, road:{b:12,t:'5–14 Days'} };
-  const rm = {'in-us':1.4,'in-de':1.3,'in-uk':1.3,'in-ae':0.9,'in-au':1.2,'in-cn':1.0,'in-br':1.5,'in-za':1.4,'in-ng':1.5,'in-jp':1.1,'in-sa':0.9,'in-ca':1.4,'in-fr':1.3,'cn-us':1.4,'cn-de':1.2,'us-de':1.1,'ae-us':1.3,'de-us':1.1};
-  const cm = {general:1,hazmat:1.9,perishable:1.6,valuable:1.7,oversized:1.8};
-
-  const INR = 83;
-  function calcQ() {
-    const s = document.getElementById('qSvc').value;
-    const wt = parseFloat(document.getElementById('qWt').value)||50;
-    const vol = parseFloat(document.getElementById('qVol').value)||0.5;
-    const cg = document.getElementById('qCargo').value;
-    const orig = document.getElementById('qOrig').value;
-    const dest = document.getElementById('qDest').value;
-    const r = svcRates[s];
-    const routeM = rm[orig+'-'+dest] || 1.2;
-    const cargoM = cm[cg];
-    const chargeable = Math.max(wt, vol*167);
-    const freight = Math.round(chargeable * r.b * routeM * cargoM);
-    const fuel = Math.round(freight*0.15);
-    const cust = Math.round(freight*0.12);
-    const ins = Math.round(freight*0.05);
-    const total = freight+fuel+cust+ins;
-    const fmt = (usd) => '₹'+(usd*INR).toLocaleString('en-IN')+' <span style="color:var(--muted);font-size:0.7rem;">($'+usd.toLocaleString()+')</span>';
-    document.getElementById('qTotal').innerHTML = '₹'+(total*INR).toLocaleString('en-IN')+'<br><span style="font-size:0.9rem;color:var(--muted);">$'+total.toLocaleString()+'</span>';
-    document.getElementById('bFreight').innerHTML = fmt(freight);
-    document.getElementById('bFuel').innerHTML = fmt(fuel);
-    document.getElementById('bCust').innerHTML = fmt(cust);
-    document.getElementById('bIns').innerHTML = fmt(ins);
-    document.getElementById('bTime').textContent = r.t;
+function doLogin() {
+  var username = document.getElementById('loginUser').value.trim();
+  var password = document.getElementById('loginPass').value.trim();
+  var error    = document.getElementById('loginError');
+  if (!username || !password) {
+    error.textContent = 'Please enter username and password.';
+    error.classList.add('show');
+    return;
   }
-
-  // Notification
-  function showNotif(msg) {
-    const n = document.getElementById('notif');
-    n.textContent = msg; n.classList.add('show');
-    setTimeout(() => n.classList.remove('show'), 4200);
+  var list  = USERS[currentTab];
+  var found = null;
+  for (var i=0; i<list.length; i++) {
+    if (list[i].user===username && list[i].pass===password) { found=list[i]; break; }
   }
+  if (!found) {
+    error.textContent = 'Wrong username or password. Try again.';
+    error.classList.add('show');
+    return;
+  }
+  error.classList.remove('show');
+  closeLogin();
+  if (currentTab === 'admin') {
+    document.getElementById('adminDash').classList.add('show');
+  } else {
+    var first = found.name.split(' ')[0];
+    document.getElementById('custName').textContent    = found.name;
+    document.getElementById('custWelcome').textContent = first;
+    document.getElementById('custAvatar').textContent  = first[0].toUpperCase();
+    document.getElementById('customerDash').classList.add('show');
+  }
+}
 
-  // Chat
-  function toggleChat() { document.getElementById('chatPanel').classList.toggle('open'); }
-  const replies = {
-    rate: "Our rates start from ₹2,490/kg ($30) for air & express worldwide. Ocean freight from ₹6,640/CBM ($80). Final rate depends on destination, weight, cargo type. All prices in INR (1 USD = ₹83). Call +91 9930824005 for exact quote!",
-    track: "Go to our Tracking page and enter your Nexus tracking number. Need help? Call us 24/7 at +91 9930824005 or email amit.sharma07735@gmail.com",
-    country: "We deliver to 195+ countries worldwide — every single continent and nation! Asia, Europe, Americas, Africa, Middle East, Pacific. If you have a destination in mind, we cover it.",
-    contact: "📞 +91 9930824005 (24/7 available)\n✉️ amit.sharma07735@gmail.com\nWe respond within 2 hours!",
-    service: "We offer: Air Freight, Ocean Freight, Road Freight, Express Courier, Warehousing, Customs Brokerage, and Last-Mile Delivery — all AI-powered and available worldwide.",
-    time: "Transit times: Express 1–3 days,
+function doLogout() {
+  document.getElementById('customerDash').classList.remove('show');
+  document.getElementById('adminDash').classList.remove('show');
+}
+
+// ============ INIT ============
+window.addEventListener('load', function() {
+  // Quote calc init
+  calcQ();
+
+  // Login backdrop close
+  var overlay = document.getElementById('loginOverlay');
+  if (overlay) {
+    overlay.addEventListener('click', function(e){
+      if (e.target === overlay) closeLogin();
+    });
+  }
+});
+</script>
